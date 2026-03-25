@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <?php if (trim(hero_admin_setting('home_banner_logo_path', '')) !== ''): ?>
         <div style="margin-top:1rem;display:flex;align-items:center;gap:1rem;">
-          <img src="<?= e(asset_url(hero_admin_setting('home_banner_logo_path', ''))) ?>" alt="Logo bandeau" style="width:84px;height:84px;object-fit:contain;border-radius:999px;padding:.75rem;background:#f5f7fc;border:1px solid #dbe3f3;">
+          <img src="<?= e(asset_url(hero_admin_setting('home_banner_logo_path', ''))) ?>" alt="Logo bandeau" style="width:120px;height:auto;object-fit:contain;border-radius:0;padding:0;background:transparent;border:0;box-shadow:none;">
           <p style="margin:0;color:#5d6b92;">Le logo remplacera le cercle 24/7 sur le site.</p>
         </div>
       <?php endif; ?>

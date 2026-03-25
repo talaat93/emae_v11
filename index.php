@@ -98,6 +98,18 @@ if ($route === '' || $route === 'home') {
         $quoteMeta = 'Artisans disponibles • devis gratuit • réponse rapide';
     }
 
+    $banner = function_exists('hero_banner_settings') ? hero_banner_settings() : [];
+    $bannerButton1Href = trim((string) ($banner['button1_url'] ?? ''));
+    if ($bannerButton1Href !== '' && !preg_match('#^(https?:|tel:|mailto:|/)#i', $bannerButton1Href)) {
+        $bannerButton1Href = route_url($bannerButton1Href);
+    }
+    $bannerButton2Href = trim((string) ($banner['button2_url'] ?? ''));
+    if ($bannerButton2Href !== '' && !preg_match('#^(https?:|tel:|mailto:|/)#i', $bannerButton2Href)) {
+        $bannerButton2Href = route_url($bannerButton2Href);
+    }
+    $bannerLogoPath = trim((string) ($banner['logo_path'] ?? ''));
+    $bannerHasLogo = $bannerLogoPath !== '';
+
     $servicePlaceholderSvg = static function (string $title): string {
         $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $svg = <<<SVG
@@ -243,6 +255,43 @@ SVG;
                         </div>
                     </a>
                 <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <section class="urgency-banner-section">
+        <div class="container">
+            <div class="urgency-banner">
+                <div class="urgency-banner__brand">
+                    <?php if ($bannerHasLogo): ?>
+                        <span class="urgency-banner__logo-wrap">
+                            <img src="<?= e(asset_url($bannerLogoPath)) ?>" alt="<?= e(company_name()) ?>" class="urgency-banner__logo">
+                        </span>
+                    <?php else: ?>
+                        <span class="urgency-banner__fallback">24/7</span>
+                    <?php endif; ?>
+                </div>
+
+                <div class="urgency-banner__content">
+                    <?php if (trim((string) ($banner['eyebrow'] ?? '')) !== ''): ?>
+                        <p class="urgency-banner__eyebrow"><?= e($banner['eyebrow']) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($banner['title'] ?? '')) !== ''): ?>
+                        <h2 class="urgency-banner__title"><?= e($banner['title']) ?></h2>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($banner['lead'] ?? '')) !== ''): ?>
+                        <p class="urgency-banner__lead"><?= e($banner['lead']) ?></p>
+                    <?php endif; ?>
+                </div>
+
+                <div class="urgency-banner__actions">
+                    <?php if (trim((string) ($banner['button1_label'] ?? '')) !== '' && $bannerButton1Href !== ''): ?>
+                        <a class="btn btn--primary urgency-banner__button" href="<?= e($bannerButton1Href) ?>"><?= e($banner['button1_label']) ?></a>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($banner['button2_label'] ?? '')) !== '' && $bannerButton2Href !== ''): ?>
+                        <a class="btn btn--outline urgency-banner__button urgency-banner__button--light" href="<?= e($bannerButton2Href) ?>"><?= e($banner['button2_label']) ?></a>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </section>

@@ -287,6 +287,20 @@ function hero_settings(): array
     ];
 }
 
+function hero_banner_settings(): array
+{
+    return [
+        'eyebrow' => setting('home_banner_eyebrow', 'Urgence technique'),
+        'title' => setting('home_banner_title', 'Astreinte visible, message clair, conversion immédiate'),
+        'lead' => setting('home_banner_lead', 'Le site met en avant votre numéro, le devis en ligne et des pages métier dédiées pour capter les demandes utiles dès l’arrivée sur la page d’accueil.'),
+        'button1_label' => setting('home_banner_button1_label', 'Appel urgent'),
+        'button1_url' => setting('home_banner_button1_url', company_phone_link()),
+        'button2_label' => setting('home_banner_button2_label', 'Envoyer un message'),
+        'button2_url' => setting('home_banner_button2_url', 'quote'),
+        'logo_path' => setting('home_banner_logo_path', ''),
+    ];
+}
+
 function hero_feature_cards(array $hero): array
 {
     $features = [
