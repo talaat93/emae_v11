@@ -1,0 +1,14 @@
+Dans index.php, remplace exactement :
+
+<h2><?= e($quoteTitle) ?></h2>
+
+par :
+
+<h2 style="font-size: <?= e(css_value((string) ($hero['quote_title_size'] ?? 'clamp(1.9rem, 3vw, 2.6rem)'), 'clamp(1.9rem, 3vw, 2.6rem)')) ?>;">
+    <?= e($quoteTitle) ?>
+</h2>
+
+Option CSS de secours si tu préfères passer par le style global :
+.hero-quote-card--hero h2{
+    font-size: var(--hero-quote-title-size, clamp(1.9rem, 3vw, 2.6rem));
+}
