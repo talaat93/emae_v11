@@ -14,14 +14,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'hero_bg_from','hero_bg_to','hero_glow_left','hero_glow_right',
         'home_eyebrow','home_title','home_lead','home_bullets',
         'home_eyebrow_color','home_title_color','home_lead_color',
+        'home_eyebrow_size','home_title_size','home_lead_size','home_chip_size','home_button_size','home_feature_size',
         'home_chip_1','home_chip_2','home_chip_3','home_chip_4','home_chip_5','home_chip_6',
         'home_button1_label','home_button1_url','home_button2_label','home_button2_url',
         'home_feature_1_title','home_feature_1_text','home_feature_2_title','home_feature_2_text','home_feature_3_title','home_feature_3_text',
         'home_quote_eyebrow','home_quote_title','home_quote_service_label','home_quote_city_label','home_quote_city_placeholder','home_quote_button_label','home_quote_meta',
+        'home_banner_eyebrow','home_banner_title','home_banner_lead','home_banner_button1_label','home_banner_button1_url','home_banner_button2_label','home_banner_button2_url','home_banner_logo_path',
     ];
 
     foreach ($fields as $field) {
         set_setting($field, trim((string) ($_POST[$field] ?? '')));
+    }
+
+    if (function_exists('upload_image_field')) {
+        $uploadedLogo = upload_image_field('home_banner_logo_file', 'hero');
+        if ($uploadedLogo) {
+            set_setting('home_banner_logo_path', $uploadedLogo);
+        }
     }
 
     flash('success', 'Bloc accueil enregistré avec succès.');
@@ -39,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </div>
 
-<form method="post" class="admin-stack">
+<form method="post" enctype="multipart/form-data" class="admin-stack">
   <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
 
   <section class="admin-panel">
@@ -68,6 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label class="admin-field"><span>Couleur titre</span><input type="color" name="home_title_color" value="<?= e(hero_admin_setting('home_title_color', '#ffffff')) ?>"></label>
         <label class="admin-field"><span>Couleur descriptif</span><input type="color" name="home_lead_color" value="<?= e(hero_admin_setting('home_lead_color', '#dbe6ff')) ?>"></label>
       </div>
+      <div class="admin-form-grid admin-form-grid--3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;">
+        <label class="admin-field"><span>Taille petit texte</span><input type="text" name="home_eyebrow_size" placeholder="ex : 14px ou 0.92rem" value="<?= e(hero_admin_setting('home_eyebrow_size', '0.95rem')) ?>"></label>
+        <label class="admin-field"><span>Taille titre</span><input type="text" name="home_title_size" placeholder="ex : 72px ou clamp(3rem,6vw,5rem)" value="<?= e(hero_admin_setting('home_title_size', 'clamp(3.9rem, 7vw, 6.15rem)')) ?>"></label>
+        <label class="admin-field"><span>Taille descriptif</span><input type="text" name="home_lead_size" placeholder="ex : 20px ou 1.2rem" value="<?= e(hero_admin_setting('home_lead_size', '1.18rem')) ?>"></label>
+      </div>
+      <div class="admin-form-grid admin-form-grid--3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;">
+        <label class="admin-field"><span>Taille onglets services</span><input type="text" name="home_chip_size" placeholder="ex : 16px" value="<?= e(hero_admin_setting('home_chip_size', '1rem')) ?>"></label>
+        <label class="admin-field"><span>Taille boutons hero</span><input type="text" name="home_button_size" placeholder="ex : 17px" value="<?= e(hero_admin_setting('home_button_size', '1rem')) ?>"></label>
+        <label class="admin-field"><span>Taille bandeau infos</span><input type="text" name="home_feature_size" placeholder="ex : 16px" value="<?= e(hero_admin_setting('home_feature_size', '0.98rem')) ?>"></label>
+      </div>
     </div>
   </section>
 
@@ -91,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </section>
 
   <section class="admin-panel">
-    <div class="admin-panel__head"><h2>4. Bandeau infos</h2><p>Ces 3 textes seront affichés sur un seul long onglet sous les boutons.</p></div>
+    <div class="admin-panel__head"><h2>4. Cartes infos</h2><p>Les 3 cartes en dessous des boutons.</p></div>
     <div class="admin-panel__body">
       <div class="admin-form-grid admin-form-grid--3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;">
         <label class="admin-field"><span>Titre carte 1</span><input type="text" name="home_feature_1_title" value="<?= e(hero_admin_setting('home_feature_1_title', 'Mobile first')) ?>"></label>
@@ -107,17 +126,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <section class="admin-panel">
     <div class="admin-panel__head"><h2>5. Bloc devis à droite</h2><p>Titre et libellés du formulaire.</p></div>
     <div class="admin-panel__body">
-      <label class="admin-field"><span>Petit texte bloc devis</span><input type="text" name="home_quote_eyebrow" value="<?= e(hero_admin_setting('home_quote_eyebrow', 'Demande rapide')) ?>"></label>
-      <label class="admin-field"><span>Titre bloc devis</span><input type="text" name="home_quote_title" value="<?= e(hero_admin_setting('home_quote_title', 'Être rappelé')) ?>"></label>
+      <label class="admin-field"><span>Petit texte bloc devis</span><input type="text" name="home_quote_eyebrow" value="<?= e(hero_admin_setting('home_quote_eyebrow', 'DEMANDE DE DEVIS GRATUITE')) ?>"></label>
+      <label class="admin-field"><span>Titre bloc devis</span><input type="text" name="home_quote_title" value="<?= e(hero_admin_setting('home_quote_title', 'Obtenir un rappel rapide')) ?>"></label>
       <div class="admin-form-grid admin-form-grid--2">
         <label class="admin-field"><span>Libellé service</span><input type="text" name="home_quote_service_label" value="<?= e(hero_admin_setting('home_quote_service_label', 'Service')) ?>"></label>
         <label class="admin-field"><span>Libellé ville</span><input type="text" name="home_quote_city_label" value="<?= e(hero_admin_setting('home_quote_city_label', 'Ville')) ?>"></label>
       </div>
       <label class="admin-field"><span>Placeholder ville</span><input type="text" name="home_quote_city_placeholder" value="<?= e(hero_admin_setting('home_quote_city_placeholder', 'Ex : Meaux, Paris, Toulouse')) ?>"></label>
       <div class="admin-form-grid admin-form-grid--2">
-        <label class="admin-field"><span>Texte bouton</span><input type="text" name="home_quote_button_label" value="<?= e(hero_admin_setting('home_quote_button_label', 'Être rappelé')) ?>"></label>
+        <label class="admin-field"><span>Texte bouton</span><input type="text" name="home_quote_button_label" value="<?= e(hero_admin_setting('home_quote_button_label', 'Continuer')) ?>"></label>
         <label class="admin-field"><span>Texte bas</span><input type="text" name="home_quote_meta" value="<?= e(hero_admin_setting('home_quote_meta', 'Artisans disponibles • devis gratuit • réponse rapide')) ?>"></label>
       </div>
+    </div>
+  </section>
+
+  <section class="admin-panel">
+    <div class="admin-panel__head"><h2>6. Bandeau urgence technique</h2><p>Grand bloc horizontal sous les cartes images, avec logo personnalisable à la place du 24/7.</p></div>
+    <div class="admin-panel__body">
+      <div class="admin-form-grid admin-form-grid--2">
+        <label class="admin-field"><span>Petit texte</span><input type="text" name="home_banner_eyebrow" value="<?= e(hero_admin_setting('home_banner_eyebrow', 'Urgence technique')) ?>"></label>
+        <label class="admin-field"><span>Titre</span><input type="text" name="home_banner_title" value="<?= e(hero_admin_setting('home_banner_title', 'Astreinte visible, message clair, conversion immédiate')) ?>"></label>
+      </div>
+      <label class="admin-field"><span>Description</span><textarea name="home_banner_lead" rows="4"><?= e(hero_admin_setting('home_banner_lead', 'Le site met en avant votre numéro, le devis en ligne et des pages métier dédiées pour capter les demandes utiles dès l’arrivée sur la page d’accueil.')) ?></textarea></label>
+      <div class="admin-form-grid admin-form-grid--2">
+        <label class="admin-field"><span>Bouton 1</span><input type="text" name="home_banner_button1_label" value="<?= e(hero_admin_setting('home_banner_button1_label', 'Appel urgent')) ?>"></label>
+        <label class="admin-field"><span>Lien bouton 1</span><input type="text" name="home_banner_button1_url" value="<?= e(hero_admin_setting('home_banner_button1_url', company_phone_link())) ?>"></label>
+      </div>
+      <div class="admin-form-grid admin-form-grid--2">
+        <label class="admin-field"><span>Bouton 2</span><input type="text" name="home_banner_button2_label" value="<?= e(hero_admin_setting('home_banner_button2_label', 'Envoyer un message')) ?>"></label>
+        <label class="admin-field"><span>Lien bouton 2</span><input type="text" name="home_banner_button2_url" value="<?= e(hero_admin_setting('home_banner_button2_url', 'quote')) ?>"></label>
+      </div>
+      <div class="admin-form-grid admin-form-grid--2">
+        <label class="admin-field"><span>Chemin logo actuel</span><input type="text" name="home_banner_logo_path" value="<?= e(hero_admin_setting('home_banner_logo_path', '')) ?>" placeholder="storage/uploads/hero/mon-logo.png"></label>
+        <label class="admin-field"><span>Uploader un logo</span><input type="file" name="home_banner_logo_file" accept="image/*"></label>
+      </div>
+      <?php if (trim(hero_admin_setting('home_banner_logo_path', '')) !== ''): ?>
+        <div style="margin-top:1rem;display:flex;align-items:center;gap:1rem;">
+          <img src="<?= e(asset_url(hero_admin_setting('home_banner_logo_path', ''))) ?>" alt="Logo bandeau" style="width:84px;height:84px;object-fit:contain;border-radius:999px;padding:.75rem;background:#f5f7fc;border:1px solid #dbe3f3;">
+          <p style="margin:0;color:#5d6b92;">Le logo remplacera le cercle 24/7 sur le site.</p>
+        </div>
+      <?php endif; ?>
     </div>
   </section>
 

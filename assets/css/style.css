@@ -1364,3 +1364,598 @@ hr {
     aspect-ratio: 5 / 6;
   }
 }
+
+
+/* ===== EMAE v10.1 home override: hero quote card, single long ribbon, portrait service cards ===== */
+.hero--home .hero__grid {
+  grid-template-columns: minmax(0, 1.02fr) minmax(430px, 520px);
+  gap: 2.35rem;
+  align-items: start;
+}
+
+.hero--home .hero__content {
+  padding-top: 0.55rem;
+}
+
+.hero--home .hero__lead {
+  max-width: 720px;
+}
+
+.hero--home .hero__chips {
+  margin: 1.45rem 0 1.3rem;
+}
+
+.hero--home .hero__feature-ribbon {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.9rem;
+  margin-top: 1.65rem;
+  padding: 1rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 18px 42px rgba(5, 12, 37, 0.14);
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.hero--home .hero__feature-ribbon::-webkit-scrollbar {
+  display: none;
+}
+
+.hero--home .hero__feature-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.hero--home .hero__feature-item strong {
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.hero--home .hero__feature-separator {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 1.2rem;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.hero--home .hero__visual--hero-form {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  align-self: start;
+}
+
+.hero--home .hero-quote-card,
+.hero--home .hero-quote-card--hero {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  margin-left: auto;
+}
+
+.hero--home .hero-quote-card--hero {
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 24px 60px rgba(6, 14, 40, 0.24);
+  padding: 1.45rem;
+}
+
+.hero--home .hero-quote-card--hero::before {
+  display: none;
+}
+
+.hero--home .hero-quote-card__eyebrow {
+  margin: 0 0 0.75rem;
+  color: #5f74a8;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero--home .hero-quote-card h2,
+.hero--home .hero-quote-card--hero h2 {
+  margin: 0 0 1rem;
+  color: #122a60;
+  font-size: clamp(1.95rem, 3vw, 2.7rem);
+  line-height: 1.06;
+}
+
+.hero--home .hero-quote-card__form {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.hero--home .hero-quote-card__form label {
+  display: block;
+  margin-bottom: 0.95rem;
+  color: #17305f;
+  font-weight: 700;
+}
+
+.hero--home .hero-quote-card__form input,
+.hero--home .hero-quote-card__form select {
+  width: 100%;
+  min-height: 56px;
+  margin-top: 0.45rem;
+  border-radius: 18px;
+  border: 1px solid #d3ddef;
+  background: #ffffff;
+  color: #12234f;
+  padding: 0 1rem;
+  outline: none;
+  box-shadow: none;
+}
+
+.hero--home .hero-quote-card__form input:focus,
+.hero--home .hero-quote-card__form select:focus {
+  border-color: #f0ba37;
+  box-shadow: 0 0 0 4px rgba(240, 186, 55, 0.16);
+}
+
+.hero--home .form-grid--hero {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.hero--home .hero-quote-card__meta {
+  margin: 0.95rem 0 0;
+  color: #6e7ea3;
+  font-size: 0.95rem;
+}
+
+.hero--home .hero-quote-card--hero .btn--primary {
+  min-height: 54px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f3c549 0%, #e8b428 100%);
+  color: #0f224f;
+  box-shadow: 0 16px 34px rgba(232, 180, 40, 0.24);
+}
+
+.hero--home .hero-quote-card--hero .btn--primary:hover {
+  background: linear-gradient(180deg, #f6cf5e 0%, #e2a81a 100%);
+}
+
+.hero--home .service-showcase--v10 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: -3.15rem;
+  position: relative;
+  z-index: 3;
+}
+
+.hero--home .service-media-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  min-height: 360px;
+  border-radius: 28px;
+  background: #dce4f8;
+  box-shadow: 0 22px 46px rgba(10, 18, 46, 0.16);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero--home .service-media-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.7s ease;
+}
+
+.hero--home .service-media-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 60px rgba(10, 18, 46, 0.24);
+}
+
+.hero--home .service-media-card:hover img {
+  transform: scale(1.08);
+}
+
+.hero--home .service-media-card__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7, 17, 41, 0.06) 0%, rgba(7, 17, 41, 0.28) 38%, rgba(8, 16, 43, 0.88) 100%);
+}
+
+.hero--home .service-media-card__body {
+  position: absolute;
+  inset: auto 1.15rem 1.15rem 1.15rem;
+  z-index: 2;
+  padding: 0;
+}
+
+.hero--home .service-media-card__body h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.34rem;
+  line-height: 1.08;
+  text-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+}
+
+.hero--home .split-panel {
+  gap: 1.35rem;
+  align-items: start;
+}
+
+.hero--home .reviews-grid {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.15rem;
+}
+
+.hero--home .review-card {
+  padding: 1rem 1.05rem;
+  border-radius: 18px;
+  background: #f8fbff;
+  border: 1px solid #dfe7f7;
+}
+
+.hero--home .review-card__stars {
+  margin-bottom: 0.45rem;
+  color: #ee7d1a;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.hero--home .review-card h3 {
+  margin: 0 0 0.35rem;
+  color: #132a59;
+  font-size: 1.02rem;
+}
+
+.hero--home .review-card p {
+  margin: 0;
+  color: #506381;
+  line-height: 1.6;
+}
+
+.hero--home .quote-panel {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+  border: 1px solid #dfe7f7;
+  box-shadow: 0 20px 40px rgba(12, 24, 63, 0.08);
+}
+
+.hero--home .quote-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(238, 125, 26, 0.04), rgba(120, 163, 255, 0.06));
+  pointer-events: none;
+}
+
+.hero--home .quote-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero--home .quote-panel__lead {
+  margin: 0 0 1rem;
+  color: #5c6f8d;
+  line-height: 1.6;
+}
+
+.hero--home .quote-panel label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #17305f;
+}
+
+.hero--home .quote-panel input,
+.hero--home .quote-panel select,
+.hero--home .quote-panel textarea {
+  width: 100%;
+  margin-top: 0.45rem;
+  border: 1px solid #d7dff1;
+  border-radius: 14px;
+  background: #fff;
+  padding: 0.92rem 1rem;
+  color: #14214b;
+  font: inherit;
+}
+
+.hero--home .quote-panel textarea {
+  min-height: 132px;
+  resize: vertical;
+}
+
+.hero--home .quote-panel input:focus,
+.hero--home .quote-panel select:focus,
+.hero--home .quote-panel textarea:focus {
+  outline: 0;
+  border-color: #a9b8e6;
+  box-shadow: 0 0 0 4px rgba(78, 117, 214, 0.12);
+}
+
+@media (max-width: 1180px) {
+  .hero--home .hero__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
+  }
+
+  .hero--home .service-showcase--v10 {
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 1040px) {
+  .hero--home .hero__grid,
+  .hero--home .split-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .hero--home .hero-quote-card,
+  .hero--home .hero-quote-card--hero {
+    max-width: none;
+    margin-left: 0;
+  }
+
+  .hero--home .service-showcase--v10 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .hero--home .form-grid--hero,
+  .hero--home .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero--home .service-showcase--v10 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero--home .service-media-card {
+    min-height: 320px;
+  }
+
+  .hero--home .hero__feature-ribbon {
+    border-radius: 24px;
+    padding: 0.9rem 1rem;
+  }
+}
+
+
+
+/* ===== Patch home : bloc rappel rapide à droite du titre ===== */
+.hero--home .hero__grid--callback-right {
+  grid-template-columns: minmax(0, 1.04fr) minmax(420px, 470px);
+  align-items: start;
+  gap: 2.4rem;
+}
+
+.hero--home .hero__grid--callback-right .hero__content {
+  max-width: 760px;
+}
+
+.hero--home .hero__grid--callback-right .hero__visual--hero-form {
+  justify-self: end;
+  width: 100%;
+  min-width: 0;
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card--hero {
+  max-width: 470px;
+  width: 100%;
+  margin-top: 0.1rem;
+  margin-left: auto;
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__eyebrow {
+  color: #5f74a8;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card--hero h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(1.85rem, 2.7vw, 2.45rem);
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__form {
+  padding: 0;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__form label {
+  margin-bottom: 0.9rem;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__form input,
+.hero--home .hero__grid--callback-right .hero-quote-card__form select,
+.hero--home .hero__grid--callback-right .hero-quote-card__form textarea {
+  min-height: 50px;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__form textarea {
+  width: 100%;
+  min-height: 90px;
+  margin-top: 0.45rem;
+  border-radius: 18px;
+  border: 1px solid #d3ddef;
+  background: #ffffff;
+  color: #12234f;
+  padding: 0.9rem 1rem;
+  outline: none;
+  resize: vertical;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__form textarea:focus {
+  border-color: #f0ba37;
+  box-shadow: 0 0 0 4px rgba(240, 186, 55, 0.16);
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin: 0.8rem 0 1rem;
+  color: #6e7ea3;
+  font-size: 0.93rem;
+  font-weight: 500;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__checkbox input {
+  width: 18px;
+  min-height: 18px;
+  margin: 0.15rem 0 0;
+  flex: 0 0 auto;
+}
+
+.hero--home .hero__grid--callback-right .hero__feature-ribbon {
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .hero--home .hero__grid--callback-right {
+    grid-template-columns: 1fr;
+  }
+
+  .hero--home .hero__grid--callback-right .hero__content {
+    order: 1;
+    max-width: none;
+  }
+
+  .hero--home .hero__grid--callback-right .hero__visual--hero-form {
+    order: 2;
+    justify-self: stretch;
+  }
+
+  .hero--home .hero__grid--callback-right .hero-quote-card--hero {
+    max-width: none;
+    margin-left: 0;
+  }
+}
+
+
+
+/* ===== Ajustement final : formulaire rappel rapide ===== */
+.hero--home .hero__grid--callback-right .hero-quote-card--hero {
+  max-width: 470px;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__form {
+  display: grid;
+  gap: 0.82rem;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__form label {
+  margin-bottom: 0;
+}
+
+.hero--home .hero__grid--callback-right .hero-quote-card__meta {
+  margin-top: 0.15rem;
+}
+
+
+/* ===== Cartes services sous le hero : style référence 4 colonnes ===== */
+.service-band--reference {
+  padding-top: 1.1rem;
+}
+
+.service-showcase--reference {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+  margin-top: 0;
+}
+
+.service-media-card--reference {
+  position: relative;
+  display: block;
+  min-height: 295px;
+  aspect-ratio: 0.76 / 1;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #10245d;
+  box-shadow: 0 14px 34px rgba(8, 18, 49, 0.18);
+  transform: translateY(0);
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+
+.service-media-card--reference img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform .6s ease;
+}
+
+.service-media-card--reference:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 45px rgba(8, 18, 49, 0.25);
+}
+
+.service-media-card--reference:hover img {
+  transform: scale(1.07);
+}
+
+.service-media-card--reference .service-media-card__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 18, 60, 0.06) 0%, rgba(9, 20, 56, 0.24) 36%, rgba(7, 15, 42, 0.92) 100%);
+}
+
+.service-media-card--reference .service-media-card__body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 1rem .9rem 1.1rem;
+  text-align: center;
+}
+
+.service-media-card--reference .service-media-card__body h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.05rem;
+  line-height: 1.08;
+  font-weight: 700;
+  white-space: pre-line;
+  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
+}
+
+@media (max-width: 1100px) {
+  .service-showcase--reference {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .service-showcase--reference {
+    grid-template-columns: 1fr;
+  }
+
+  .service-media-card--reference {
+    aspect-ratio: 1 / 1.08;
+    min-height: 260px;
+  }
+}
+
+
+/* Fix visibilite cartes services sous le hero */
+.service-showcase--reference .service-media-card.reveal,
+.service-showcase--reference .service-media-card--reference.reveal {
+  opacity: 1;
+  transform: none;
+}

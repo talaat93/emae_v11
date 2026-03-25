@@ -246,6 +246,12 @@ function theme_css_variables(): string
         '--hero-eyebrow-color' => setting('home_eyebrow_color', '#7f94d6'),
         '--hero-title-color' => setting('home_title_color', '#ffffff'),
         '--hero-lead-color' => setting('home_lead_color', '#d9e2ff'),
+        '--hero-eyebrow-size' => setting('home_eyebrow_size', '0.95rem'),
+        '--hero-title-size' => setting('home_title_size', 'clamp(3.9rem, 7vw, 6.15rem)'),
+        '--hero-lead-size' => setting('home_lead_size', '1.18rem'),
+        '--hero-chip-size' => setting('home_chip_size', '1rem'),
+        '--hero-button-size' => setting('home_button_size', '1rem'),
+        '--hero-feature-size' => setting('home_feature_size', '0.98rem'),
     ];
     $css = ':root{';
     foreach ($vars as $k=>$v) $css .= $k . ':' . $v . ';';
@@ -271,12 +277,12 @@ function hero_settings(): array
         'feature_2_text' => setting('home_feature_2_text', 'Appel, devis, contact, espace client'),
         'feature_3_title' => setting('home_feature_3_title', 'Image premium'),
         'feature_3_text' => setting('home_feature_3_text', 'Corporate, claire et rassurante'),
-        'quote_eyebrow' => setting('home_quote_eyebrow', 'Demande rapide'),
-        'quote_title' => setting('home_quote_title', 'Être rappelé'),
+        'quote_eyebrow' => setting('home_quote_eyebrow', 'DEMANDE DE DEVIS GRATUITE'),
+        'quote_title' => setting('home_quote_title', 'Obtenir un rappel rapide'),
         'quote_service_label' => setting('home_quote_service_label', 'Service'),
         'quote_city_label' => setting('home_quote_city_label', 'Ville'),
         'quote_city_placeholder' => setting('home_quote_city_placeholder', 'Ex : Meaux, Paris, Toulouse'),
-        'quote_button_label' => setting('home_quote_button_label', 'Être rappelé'),
+        'quote_button_label' => setting('home_quote_button_label', 'Continuer'),
         'quote_meta' => setting('home_quote_meta', 'Artisans disponibles • devis gratuit • réponse rapide'),
     ];
 }
@@ -291,18 +297,6 @@ function hero_feature_cards(array $hero): array
     return array_values(array_filter($features, static fn(array $f): bool => $f['title'] !== '' || $f['text'] !== ''));
 }
 
-function public_asset_exists(string $path): bool
-{
-    $path = trim($path);
-    if ($path === '') {
-        return false;
-    }
-    if (preg_match('#^(https?:)?//#i', $path)) {
-        return true;
-    }
-    return is_file(__DIR__ . '/../' . ltrim($path, '/'));
-}
-
 function service_cards_settings(): array
 {
     $default = [
@@ -312,25 +306,7 @@ function service_cards_settings(): array
         ['title'=>'Maintenance & modernisation','image'=>'storage/uploads/services/service-maintenance.svg','link'=>'depannage-paris'],
     ];
     $cards = get_json_setting('home_service_cards', $default);
-    if (!$cards) {
-        return $default;
-    }
-
-    $normalized = [];
-    foreach ($default as $index => $fallback) {
-        $card = is_array($cards[$index] ?? null) ? $cards[$index] : [];
-        $image = trim((string) ($card['image'] ?? ''));
-        if ($image === '' || !public_asset_exists($image)) {
-            $image = $fallback['image'];
-        }
-        $normalized[] = [
-            'title' => trim((string) ($card['title'] ?? '')) !== '' ? trim((string) $card['title']) : $fallback['title'],
-            'image' => $image,
-            'link' => trim((string) ($card['link'] ?? '')) !== '' ? trim((string) $card['link']) : $fallback['link'],
-        ];
-    }
-
-    return $normalized;
+    return $cards ?: $default;
 }
 
 function seo_defaults(string $route = 'home', ?array $page = null): array
