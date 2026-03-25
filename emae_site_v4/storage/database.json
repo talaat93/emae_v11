@@ -1,0 +1,71 @@
+{
+    "users": [
+        {
+            "first_name": "Test",
+            "last_name": "User",
+            "email": "test@example.com",
+            "phone": "0102030405",
+            "password_hash": "$2y$12$jIJwX.SX\/tOppX49HvHJxuAqMu263SKJNS3iPI.KCUNNlh9xeeYQ.",
+            "created_at": "2026-03-20T04:13:14+01:00",
+            "id": 1
+        }
+    ],
+    "quotes": [
+        {
+            "user_id": 1,
+            "full_name": "Test User",
+            "email": "test@example.com",
+            "phone": "0102030405",
+            "service_type": "Climatisation",
+            "city": "Meaux",
+            "urgency": "Urgent",
+            "message": "Besoin d'un depannage",
+            "consent": 1,
+            "created_at": "2026-03-20T04:13:28+01:00",
+            "id": 1
+        },
+        {
+            "user_id": null,
+            "full_name": "abdelhafez talaat",
+            "email": "talaat93@hotmail.fr",
+            "phone": "0667830376",
+            "service_type": "Électricité",
+            "city": "Aubervilliers",
+            "urgency": "Standard",
+            "message": "suce moi",
+            "consent": 1,
+            "created_at": "2026-03-24T03:09:04+01:00",
+            "id": 2
+        }
+    ],
+    "contacts": [],
+    "documents": [
+        {
+            "id": 1,
+            "title": "Plaquette EMAE",
+            "filename": "plaquette-emae.pdf",
+            "audience": "public",
+            "created_at": "2026-03-20T00:00:00+01:00"
+        },
+        {
+            "id": 2,
+            "title": "Checklist maintenance CVC",
+            "filename": "checklist-maintenance-cvc.pdf",
+            "audience": "client",
+            "created_at": "2026-03-20T00:00:00+01:00"
+        },
+        {
+            "id": 3,
+            "title": "Guide préparation intervention",
+            "filename": "guide-preparation-intervention.pdf",
+            "audience": "client",
+            "created_at": "2026-03-20T00:00:00+01:00"
+        }
+    ],
+    "last_ids": {
+        "users": 1,
+        "quotes": 2,
+        "contacts": 0,
+        "documents": 3
+    }
+}

@@ -323,6 +323,102 @@ function service_cards_settings(): array
     return $cards ?: $default;
 }
 
+
+function home_expertise_settings(): array
+{
+    $defaultCards = [
+        [
+            'icon' => '⚡',
+            'title' => 'Électricité',
+            'lead' => 'Mise en sécurité, dépannage, tableaux, rénovation et alimentation des équipements techniques.',
+            'item_1' => 'Recherche de panne et remise en service',
+            'item_2' => 'Mise en sécurité et remise en conformité',
+            'item_3' => 'Tableaux électriques, TGBT et protection',
+            'link' => 'electricien-meaux',
+        ],
+        [
+            'icon' => '🔧',
+            'title' => 'Plomberie',
+            'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
+            'item_1' => 'Recherche de fuite',
+            'item_2' => 'Réseaux sanitaires et robinetterie',
+            'item_3' => 'Maintenance des installations d’eau',
+            'link' => 'plombier-meaux',
+        ],
+        [
+            'icon' => '🔥',
+            'title' => 'Chauffage',
+            'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
+            'item_1' => 'Diagnostic de panne chauffage',
+            'item_2' => 'Remise en service et contrôle de fonctionnement',
+            'item_3' => 'Optimisation des réglages',
+            'link' => 'services',
+        ],
+        [
+            'icon' => '❄️',
+            'title' => 'Climatisation',
+            'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
+            'item_1' => 'Diagnostic de dysfonctionnement',
+            'item_2' => 'Entretien courant et nettoyage',
+            'item_3' => 'Contrôle des performances',
+            'link' => 'climatisation-meaux',
+        ],
+    ];
+
+    return [
+        'eyebrow' => setting('home_expertise_eyebrow', 'Expertise'),
+        'title' => setting('home_expertise_title', 'Notre expertise multitechnique'),
+        'lead' => setting('home_expertise_lead', 'Des blocs métier clairs pour présenter vos interventions principales et orienter rapidement le client vers le bon service.'),
+        'cards' => get_json_setting('home_expertise_cards', $defaultCards),
+    ];
+}
+
+function home_reviews_block_settings(): array
+{
+    return [
+        'eyebrow' => setting('home_reviews_eyebrow', 'Avis clients'),
+        'title' => setting('home_reviews_title', 'Des témoignages qui rassurent'),
+        'lead' => setting('home_reviews_lead', ''),
+    ];
+}
+
+function home_quote_panel_settings(): array
+{
+    return [
+        'eyebrow' => setting('home_quote_panel_eyebrow', 'Demande de devis'),
+        'title' => setting('home_quote_panel_title', 'Demande de devis'),
+        'lead' => setting('home_quote_panel_lead', 'Décrivez votre besoin en quelques lignes. EMAE vous recontacte rapidement avec un devis clair et adapté.'),
+        'service_label' => setting('home_quote_panel_service_label', 'Service'),
+        'service_placeholder' => setting('home_quote_panel_service_placeholder', 'Choisir'),
+        'message_label' => setting('home_quote_panel_message_label', 'Votre besoin'),
+        'urgency_label' => setting('home_quote_panel_urgency_label', 'Urgence'),
+        'button_label' => setting('home_quote_panel_button_label', quote_form_options()['submit_label']),
+    ];
+}
+
+function home_zone_settings(): array
+{
+    $defaultCards = [
+        ['title' => 'Île-de-France', 'text' => 'Interventions rapides sur Paris, Seine-et-Marne, Val-de-Marne et départements voisins selon vos demandes.'],
+        ['title' => 'Occitanie', 'text' => 'Déploiement des interventions, installations et opérations de maintenance sur les zones couvertes par EMAE.'],
+        ['title' => 'Sites multi-techniques', 'text' => 'Organisation des demandes urgentes, contrats de maintenance et interventions planifiées selon vos bâtiments.'],
+    ];
+
+    return [
+        'eyebrow' => setting('home_zone_eyebrow', 'Zone d’intervention'),
+        'title' => setting('home_zone_title', 'Une zone d’intervention claire et rassurante'),
+        'lead' => setting('home_zone_lead', 'Mets en avant vos zones principales et la logique de couverture pour rassurer dès la page d’accueil.'),
+        'badges' => array_values(array_filter([
+            setting('home_zone_badge_1', 'Île-de-France'),
+            setting('home_zone_badge_2', 'Occitanie'),
+            setting('home_zone_badge_3', 'Intervention planifiée & urgence'),
+        ], static fn($v): bool => trim((string) $v) !== '')),
+        'button_label' => setting('home_zone_button_label', 'Voir nos zones'),
+        'button_url' => setting('home_zone_button_url', 'contact'),
+        'cards' => get_json_setting('home_zone_cards', $defaultCards),
+    ];
+}
+
 function seo_defaults(string $route = 'home', ?array $page = null): array
 {
     if ($page) {

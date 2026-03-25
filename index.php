@@ -115,52 +115,42 @@ if ($route === '' || $route === 'home') {
         $serviceLinksByTitle[mb_strtolower(trim((string) ($card['title'] ?? '')), 'UTF-8')] = trim((string) ($card['link'] ?? ''));
     }
 
-    $expertiseBlocks = [
-        [
-            'icon' => '⚡',
-            'title' => 'Électricité',
-            'lead' => 'Mise en sécurité, dépannage, tableaux, rénovation et alimentation des équipements techniques.',
-            'items' => [
-                'Recherche de panne et remise en service',
-                'Mise en sécurité et remise en conformité',
-                'Tableaux électriques, TGBT et protection',
-            ],
-            'link' => $serviceLinksByTitle['électricité'] ?? $serviceLinksByTitle['electricite'] ?? 'services',
-        ],
-        [
-            'icon' => '🔧',
-            'title' => 'Plomberie',
-            'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
-            'items' => [
-                'Recherche de fuite',
-                'Réseaux sanitaires et robinetterie',
-                'Maintenance des installations d’eau',
-            ],
-            'link' => $serviceLinksByTitle['plomberie'] ?? 'services',
-        ],
-        [
-            'icon' => '🔥',
-            'title' => 'Chauffage',
-            'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
-            'items' => [
-                'Diagnostic de panne chauffage',
-                'Remise en service et contrôle de fonctionnement',
-                'Optimisation des réglages',
-            ],
-            'link' => $serviceLinksByTitle['chauffage'] ?? 'services',
-        ],
-        [
-            'icon' => '❄️',
-            'title' => 'Climatisation',
-            'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
-            'items' => [
-                'Diagnostic de dysfonctionnement',
-                'Entretien courant et nettoyage',
-                'Contrôle des performances',
-            ],
-            'link' => $serviceLinksByTitle['climatisation'] ?? 'services',
-        ],
-    ];
+    $expertiseSection = function_exists('home_expertise_settings') ? home_expertise_settings() : ['eyebrow' => 'Expertise', 'title' => 'Notre expertise multitechnique', 'lead' => '', 'cards' => []];
+    $expertiseBlocks = [];
+    foreach ((array) ($expertiseSection['cards'] ?? []) as $block) {
+        $items = [];
+        foreach (['item_1', 'item_2', 'item_3'] as $itemKey) {
+            $itemValue = trim((string) ($block[$itemKey] ?? ''));
+            if ($itemValue !== '') {
+                $items[] = $itemValue;
+            }
+        }
+
+        $link = trim((string) ($block['link'] ?? 'services'));
+        $titleKey = mb_strtolower(trim((string) ($block['title'] ?? '')), 'UTF-8');
+        if ($link === '' && isset($serviceLinksByTitle[$titleKey])) {
+            $link = $serviceLinksByTitle[$titleKey];
+        }
+        if ($link === '') {
+            $link = 'services';
+        }
+
+        $expertiseBlocks[] = [
+            'icon' => trim((string) ($block['icon'] ?? '🔧')) ?: '🔧',
+            'title' => trim((string) ($block['title'] ?? '')),
+            'lead' => trim((string) ($block['lead'] ?? '')),
+            'items' => $items,
+            'link' => $link,
+        ];
+    }
+
+    $reviewsBlock = function_exists('home_reviews_block_settings') ? home_reviews_block_settings() : ['eyebrow' => 'Avis clients', 'title' => 'Des témoignages qui rassurent', 'lead' => ''];
+    $quotePanelBlock = function_exists('home_quote_panel_settings') ? home_quote_panel_settings() : ['eyebrow' => 'Demande de devis', 'title' => 'Demande de devis', 'lead' => '', 'service_label' => 'Service', 'service_placeholder' => 'Choisir', 'message_label' => 'Votre besoin', 'urgency_label' => 'Urgence', 'button_label' => quote_form_options()['submit_label']];
+    $zoneSection = function_exists('home_zone_settings') ? home_zone_settings() : ['eyebrow' => 'Zone d’intervention', 'title' => 'Une zone d’intervention claire et rassurante', 'lead' => '', 'badges' => [], 'button_label' => '', 'button_url' => '', 'cards' => []];
+    $zoneButtonHref = trim((string) ($zoneSection['button_url'] ?? ''));
+    if ($zoneButtonHref !== '' && !preg_match('#^(https?:|tel:|mailto:|/)#i', $zoneButtonHref)) {
+        $zoneButtonHref = route_url($zoneButtonHref);
+    }
 
     $servicePlaceholderSvg = static function (string $title): string {
         $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
@@ -351,9 +341,15 @@ SVG;
     <section class="section expertise-home-section">
         <div class="container">
             <div class="expertise-home-intro">
-                <p class="eyebrow">Expertise</p>
-                <h2>Notre expertise multitechnique</h2>
-                <p>Des blocs métier clairs pour présenter vos interventions principales et orienter rapidement le client vers le bon service.</p>
+                <?php if (trim((string) ($expertiseSection['eyebrow'] ?? '')) !== ''): ?>
+                    <p class="eyebrow"><?= e($expertiseSection['eyebrow']) ?></p>
+                <?php endif; ?>
+                <?php if (trim((string) ($expertiseSection['title'] ?? '')) !== ''): ?>
+                    <h2><?= e($expertiseSection['title']) ?></h2>
+                <?php endif; ?>
+                <?php if (trim((string) ($expertiseSection['lead'] ?? '')) !== ''): ?>
+                    <p><?= e($expertiseSection['lead']) ?></p>
+                <?php endif; ?>
             </div>
 
             <div class="expertise-home-grid">
@@ -376,9 +372,16 @@ SVG;
 
     <section class="section section--soft">
         <div class="container split-panel">
-            <div class="card">
-                <p class="eyebrow">Avis clients</p>
-                <h2>Des témoignages qui rassurent</h2>
+            <div class="card reviews-panel">
+                <?php if (trim((string) ($reviewsBlock['eyebrow'] ?? '')) !== ''): ?>
+                    <p class="eyebrow"><?= e($reviewsBlock['eyebrow']) ?></p>
+                <?php endif; ?>
+                <?php if (trim((string) ($reviewsBlock['title'] ?? '')) !== ''): ?>
+                    <h2><?= e($reviewsBlock['title']) ?></h2>
+                <?php endif; ?>
+                <?php if (trim((string) ($reviewsBlock['lead'] ?? '')) !== ''): ?>
+                    <p class="reviews-panel__lead"><?= e($reviewsBlock['lead']) ?></p>
+                <?php endif; ?>
                 <div class="reviews-grid">
                     <?php foreach ($reviews as $review): ?>
                         <article class="review-card">
@@ -391,9 +394,15 @@ SVG;
             </div>
 
             <div class="card form-card quote-panel">
-                <p class="eyebrow">Demande de devis</p>
-                <h2>Demande de devis</h2>
-                <p class="quote-panel__lead">Décrivez votre besoin en quelques lignes. EMAE vous recontacte rapidement avec un devis clair et adapté.</p>
+                <?php if (trim((string) ($quotePanelBlock['eyebrow'] ?? '')) !== ''): ?>
+                    <p class="eyebrow"><?= e($quotePanelBlock['eyebrow']) ?></p>
+                <?php endif; ?>
+                <?php if (trim((string) ($quotePanelBlock['title'] ?? '')) !== ''): ?>
+                    <h2><?= e($quotePanelBlock['title']) ?></h2>
+                <?php endif; ?>
+                <?php if (trim((string) ($quotePanelBlock['lead'] ?? '')) !== ''): ?>
+                    <p class="quote-panel__lead"><?= e($quotePanelBlock['lead']) ?></p>
+                <?php endif; ?>
 
                 <form action="<?= e(route_url('quote')) ?>" method="post">
                     <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
@@ -411,18 +420,18 @@ SVG;
                     </div>
 
                     <label>
-                        Service
+                        <?= e($quotePanelBlock['service_label'] ?? 'Service') ?>
                         <select name="service_type">
-                            <option value="">Choisir</option>
+                            <option value=""><?= e($quotePanelBlock['service_placeholder'] ?? 'Choisir') ?></option>
                             <?php foreach ($cards as $card): ?>
                                 <option value="<?= e($card['title']) ?>"><?= e($card['title']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </label>
 
-                    <label>Votre besoin<textarea name="message" required></textarea></label>
+                    <label><?= e($quotePanelBlock['message_label'] ?? 'Votre besoin') ?><textarea name="message" required></textarea></label>
                     <label>
-                        Urgence
+                        <?= e($quotePanelBlock['urgency_label'] ?? 'Urgence') ?>
                         <select name="urgency">
                             <option>Normale</option>
                             <option>Urgente</option>
@@ -430,8 +439,49 @@ SVG;
                         </select>
                     </label>
 
-                    <button class="btn btn--primary btn--block" type="submit"><?= e(quote_form_options()['submit_label']) ?></button>
+                    <button class="btn btn--primary btn--block" type="submit"><?= e($quotePanelBlock['button_label'] ?? quote_form_options()['submit_label']) ?></button>
                 </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="section zone-home-section">
+        <div class="container">
+            <div class="zone-home">
+                <div class="zone-home__intro">
+                    <?php if (trim((string) ($zoneSection['eyebrow'] ?? '')) !== ''): ?>
+                        <p class="eyebrow"><?= e($zoneSection['eyebrow']) ?></p>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($zoneSection['title'] ?? '')) !== ''): ?>
+                        <h2><?= e($zoneSection['title']) ?></h2>
+                    <?php endif; ?>
+                    <?php if (trim((string) ($zoneSection['lead'] ?? '')) !== ''): ?>
+                        <p class="zone-home__lead"><?= e($zoneSection['lead']) ?></p>
+                    <?php endif; ?>
+
+                    <?php if (!empty($zoneSection['badges'])): ?>
+                        <div class="zone-home__badges">
+                            <?php foreach ((array) $zoneSection['badges'] as $badge): ?>
+                                <span><?= e($badge) ?></span>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (trim((string) ($zoneSection['button_label'] ?? '')) !== '' && $zoneButtonHref !== ''): ?>
+                        <div class="zone-home__actions">
+                            <a class="btn btn--primary" href="<?= e($zoneButtonHref) ?>"><?= e($zoneSection['button_label']) ?></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="zone-home__grid">
+                    <?php foreach ((array) ($zoneSection['cards'] ?? []) as $zoneCard): ?>
+                        <article class="zone-home__card">
+                            <h3><?= e((string) ($zoneCard['title'] ?? '')) ?></h3>
+                            <p><?= e((string) ($zoneCard['text'] ?? '')) ?></p>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
     </section>
