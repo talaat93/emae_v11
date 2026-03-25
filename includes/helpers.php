@@ -189,6 +189,7 @@ function css_value(string $value, string $fallback = ''): string
     if ($value === 'auto') return 'auto';
     if (preg_match('/^-?\d+(\.\d+)?$/', $value)) return $value . 'px';
     if (preg_match('/^-?\d+(\.\d+)?(px|rem|em|%|vh|vw)$/', $value)) return $value;
+    if (preg_match('/^clamp\([^\n]+\)$/', $value)) return $value;
     return $fallback;
 }
 
@@ -252,10 +253,18 @@ function theme_css_variables(): string
         '--hero-chip-size' => setting('home_chip_size', '1rem'),
         '--hero-button-size' => setting('home_button_size', '1rem'),
         '--hero-feature-size' => setting('home_feature_size', '0.98rem'),
+        '--hero-quote-title-size' => setting('home_quote_title_size', 'clamp(1.95rem, 3vw, 2.65rem)'),
     ];
     $css = ':root{';
     foreach ($vars as $k=>$v) $css .= $k . ':' . $v . ';';
     $css .= '}';
+    $css .= '.hero-quote-card--hero h2{font-size:var(--hero-quote-title-size,clamp(1.95rem,3vw,2.65rem));}';
+    $css .= '.service-band--reference{position:relative;margin-top:-58px;padding-top:0;z-index:6;overflow:visible;}';
+    $css .= '.service-band--reference .container,.service-showcase--reference{overflow:visible;}';
+    $css .= '.service-showcase--reference{position:relative;z-index:6;}';
+    $css .= '.service-media-card--reference{box-shadow:0 24px 48px rgba(8,18,46,.20);}';
+    $css .= '@media (max-width:1100px){.service-band--reference{margin-top:-34px;}}';
+    $css .= '@media (max-width:700px){.service-band--reference{margin-top:-18px;}}';
     return '<style>' . $css . '</style>';
 }
 
@@ -279,6 +288,7 @@ function hero_settings(): array
         'feature_3_text' => setting('home_feature_3_text', 'Corporate, claire et rassurante'),
         'quote_eyebrow' => setting('home_quote_eyebrow', 'DEMANDE DE DEVIS GRATUITE'),
         'quote_title' => setting('home_quote_title', 'Obtenir un rappel rapide'),
+        'quote_title_size' => setting('home_quote_title_size', 'clamp(1.95rem, 3vw, 2.65rem)'),
         'quote_service_label' => setting('home_quote_service_label', 'Service'),
         'quote_city_label' => setting('home_quote_city_label', 'Ville'),
         'quote_city_placeholder' => setting('home_quote_city_placeholder', 'Ex : Meaux, Paris, Toulouse'),

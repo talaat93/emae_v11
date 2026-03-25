@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'home_chip_1','home_chip_2','home_chip_3','home_chip_4','home_chip_5','home_chip_6',
         'home_button1_label','home_button1_url','home_button2_label','home_button2_url',
         'home_feature_1_title','home_feature_1_text','home_feature_2_title','home_feature_2_text','home_feature_3_title','home_feature_3_text',
-        'home_quote_eyebrow','home_quote_title','home_quote_service_label','home_quote_city_label','home_quote_city_placeholder','home_quote_button_label','home_quote_meta',
+        'home_quote_eyebrow','home_quote_title','home_quote_title_size','home_quote_service_label','home_quote_city_label','home_quote_city_placeholder','home_quote_button_label','home_quote_meta',
         'home_banner_eyebrow','home_banner_title','home_banner_lead','home_banner_button1_label','home_banner_button1_url','home_banner_button2_label','home_banner_button2_url','home_banner_logo_path',
         'home_expertise_eyebrow','home_expertise_title','home_expertise_lead',
         'home_reviews_eyebrow','home_reviews_title','home_reviews_lead',
@@ -228,6 +228,7 @@ $zoneSection = function_exists('home_zone_settings') ? home_zone_settings() : $z
           <label class="admin-field"><span>Petit texte du bloc</span><input type="text" name="home_quote_eyebrow" value="<?= e(hero_admin_setting('home_quote_eyebrow', "Demande d'appel rapide")) ?>"></label>
           <label class="admin-field"><span>Titre du bloc</span><input type="text" name="home_quote_title" value="<?= e(hero_admin_setting('home_quote_title', 'Obtenir un rappel rapide')) ?>"></label>
         </div>
+        <label class="admin-field"><span>Taille du titre du bloc</span><input type="text" name="home_quote_title_size" value="<?= e(hero_admin_setting('home_quote_title_size', 'clamp(1.95rem, 3vw, 2.65rem)')) ?>" placeholder="Ex : 2.4rem ou clamp(1.95rem, 3vw, 2.65rem)"></label>
         <div class="admin-form-grid admin-form-grid--2">
           <label class="admin-field"><span>Libellé service</span><input type="text" name="home_quote_service_label" value="<?= e(hero_admin_setting('home_quote_service_label', 'Service')) ?>"></label>
           <label class="admin-field"><span>Libellé ville</span><input type="text" name="home_quote_city_label" value="<?= e(hero_admin_setting('home_quote_city_label', 'Ville')) ?>"></label>
