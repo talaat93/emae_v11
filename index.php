@@ -110,6 +110,58 @@ if ($route === '' || $route === 'home') {
     $bannerLogoPath = trim((string) ($banner['logo_path'] ?? ''));
     $bannerHasLogo = $bannerLogoPath !== '';
 
+    $serviceLinksByTitle = [];
+    foreach ($cards as $card) {
+        $serviceLinksByTitle[mb_strtolower(trim((string) ($card['title'] ?? '')), 'UTF-8')] = trim((string) ($card['link'] ?? ''));
+    }
+
+    $expertiseBlocks = [
+        [
+            'icon' => '⚡',
+            'title' => 'Électricité',
+            'lead' => 'Mise en sécurité, dépannage, tableaux, rénovation et alimentation des équipements techniques.',
+            'items' => [
+                'Recherche de panne et remise en service',
+                'Mise en sécurité et remise en conformité',
+                'Tableaux électriques, TGBT et protection',
+            ],
+            'link' => $serviceLinksByTitle['électricité'] ?? $serviceLinksByTitle['electricite'] ?? 'services',
+        ],
+        [
+            'icon' => '🔧',
+            'title' => 'Plomberie',
+            'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
+            'items' => [
+                'Recherche de fuite',
+                'Réseaux sanitaires et robinetterie',
+                'Maintenance des installations d’eau',
+            ],
+            'link' => $serviceLinksByTitle['plomberie'] ?? 'services',
+        ],
+        [
+            'icon' => '🔥',
+            'title' => 'Chauffage',
+            'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
+            'items' => [
+                'Diagnostic de panne chauffage',
+                'Remise en service et contrôle de fonctionnement',
+                'Optimisation des réglages',
+            ],
+            'link' => $serviceLinksByTitle['chauffage'] ?? 'services',
+        ],
+        [
+            'icon' => '❄️',
+            'title' => 'Climatisation',
+            'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
+            'items' => [
+                'Diagnostic de dysfonctionnement',
+                'Entretien courant et nettoyage',
+                'Contrôle des performances',
+            ],
+            'link' => $serviceLinksByTitle['climatisation'] ?? 'services',
+        ],
+    ];
+
     $servicePlaceholderSvg = static function (string $title): string {
         $safeTitle = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         $svg = <<<SVG
@@ -292,6 +344,32 @@ SVG;
                         <a class="btn btn--outline urgency-banner__button urgency-banner__button--light" href="<?= e($bannerButton2Href) ?>"><?= e($banner['button2_label']) ?></a>
                     <?php endif; ?>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section expertise-home-section">
+        <div class="container">
+            <div class="expertise-home-intro">
+                <p class="eyebrow">Expertise</p>
+                <h2>Notre expertise multitechnique</h2>
+                <p>Des blocs métier clairs pour présenter vos interventions principales et orienter rapidement le client vers le bon service.</p>
+            </div>
+
+            <div class="expertise-home-grid">
+                <?php foreach ($expertiseBlocks as $block): ?>
+                    <article class="card expertise-home-card">
+                        <div class="expertise-home-card__icon"><?= e($block['icon']) ?></div>
+                        <h3><?= e($block['title']) ?></h3>
+                        <p class="expertise-home-card__lead"><?= e($block['lead']) ?></p>
+                        <ul class="expertise-home-card__list">
+                            <?php foreach ($block['items'] as $item): ?>
+                                <li><?= e($item) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <a class="expertise-home-card__link" href="<?= e(route_url($block['link'])) ?>">En savoir plus</a>
+                    </article>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
