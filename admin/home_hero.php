@@ -228,7 +228,7 @@ $zoneSection = function_exists('home_zone_settings') ? home_zone_settings() : $z
           <label class="admin-field"><span>Petit texte du bloc</span><input type="text" name="home_quote_eyebrow" value="<?= e(hero_admin_setting('home_quote_eyebrow', "Demande d'appel rapide")) ?>"></label>
           <label class="admin-field"><span>Titre du bloc</span><input type="text" name="home_quote_title" value="<?= e(hero_admin_setting('home_quote_title', 'Obtenir un rappel rapide')) ?>"></label>
         </div>
-        <label class="admin-field"><span>Taille du titre du bloc</span><input type="text" name="home_quote_title_size" value="<?= e(hero_admin_setting('home_quote_title_size', 'clamp(1.95rem, 3vw, 2.7rem)')) ?>" placeholder="Ex : 2.2rem, 38px ou clamp(1.95rem, 3vw, 2.7rem)"></label>
+        <label class="admin-field"><span>Taille du titre du bloc</span><input type="text" name="home_quote_title_size" placeholder="Ex : 2.2rem ou clamp(1.95rem, 3vw, 2.7rem)" value="<?= e(hero_admin_setting('home_quote_title_size', 'clamp(1.95rem, 3vw, 2.7rem)')) ?>"></label>
         <div class="admin-form-grid admin-form-grid--2">
           <label class="admin-field"><span>Libellé service</span><input type="text" name="home_quote_service_label" value="<?= e(hero_admin_setting('home_quote_service_label', 'Service')) ?>"></label>
           <label class="admin-field"><span>Libellé ville</span><input type="text" name="home_quote_city_label" value="<?= e(hero_admin_setting('home_quote_city_label', 'Ville')) ?>"></label>

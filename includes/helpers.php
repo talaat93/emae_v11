@@ -253,7 +253,7 @@ function theme_css_variables(): string
         '--hero-button-size' => setting('home_button_size', '1rem'),
         '--hero-feature-size' => setting('home_feature_size', '0.98rem'),
         '--hero-quote-title-size' => setting('home_quote_title_size', 'clamp(1.95rem, 3vw, 2.7rem)'),
-        '--hero-services-overlap' => setting('home_services_overlap', '4.6rem'),
+        '--hero-services-overlap' => setting('home_services_overlap', '5.6rem'),
     ];
     $css = ':root{';
     foreach ($vars as $k=>$v) $css .= $k . ':' . $v . ';';
