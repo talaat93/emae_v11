@@ -487,6 +487,273 @@ SVG;
     </section>
     <?php render_footer(); exit; }
 
+
+
+if ($route === 'services') {
+    $page = page_by_slug('services');
+    $cards = home_cards();
+    $meta = seo_defaults('services', $page);
+
+    $serviceHubDefaults = [
+        'electricite' => [
+            'icon' => '⚡',
+            'eyebrow' => 'Électricité',
+            'title' => 'Électricité',
+            'lead' => 'Dépannage, mise en sécurité, tableaux électriques, rénovation et alimentation des équipements techniques.',
+            'points' => [
+                'Recherche de panne et remise en service',
+                'Mise en sécurité et remise en conformité',
+                'Tableaux électriques, TGBT et protection',
+            ],
+            'cta' => 'Découvrir le service',
+            'photo_label' => 'Emplacement photo électricité',
+        ],
+        'plomberie' => [
+            'icon' => '🔧',
+            'eyebrow' => 'Plomberie',
+            'title' => 'Plomberie',
+            'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
+            'points' => [
+                'Recherche de fuite',
+                'Réseaux sanitaires et robinetterie',
+                'Maintenance des installations d’eau',
+            ],
+            'cta' => 'Découvrir le service',
+            'photo_label' => 'Emplacement photo plomberie',
+        ],
+        'chauffage' => [
+            'icon' => '🔥',
+            'eyebrow' => 'Chauffage',
+            'title' => 'Chauffage',
+            'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
+            'points' => [
+                'Diagnostic de panne chauffage',
+                'Remise en service et contrôle de fonctionnement',
+                'Optimisation des réglages',
+            ],
+            'cta' => 'Découvrir le service',
+            'photo_label' => 'Emplacement photo chauffage',
+        ],
+        'climatisation' => [
+            'icon' => '❄️',
+            'eyebrow' => 'Climatisation',
+            'title' => 'Climatisation',
+            'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
+            'points' => [
+                'Diagnostic de dysfonctionnement',
+                'Entretien courant et nettoyage',
+                'Contrôle des performances',
+            ],
+            'cta' => 'Découvrir le service',
+            'photo_label' => 'Emplacement photo climatisation',
+        ],
+    ];
+
+    $serviceCards = [];
+    foreach ($cards as $card) {
+        $title = trim((string) ($card['title'] ?? ''));
+        $slug = trim((string) ($card['link'] ?? ''));
+        $key = null;
+        $ctx = mb_strtolower($title . ' ' . $slug, 'UTF-8');
+        if (str_contains($ctx, 'electric')) {
+            $key = 'electricite';
+        } elseif (str_contains($ctx, 'plomb')) {
+            $key = 'plomberie';
+        } elseif (str_contains($ctx, 'chauff')) {
+            $key = 'chauffage';
+        } elseif (str_contains($ctx, 'clim') || str_contains($ctx, 'cvc')) {
+            $key = 'climatisation';
+        }
+        if ($key === null || !isset($serviceHubDefaults[$key])) {
+            continue;
+        }
+        $serviceCards[$key] = array_merge($serviceHubDefaults[$key], [
+            'link' => $slug !== '' ? route_url($slug) : route_url('services'),
+            'image' => asset_url((string) ($card['image'] ?? '')),
+            'raw_image' => trim((string) ($card['image'] ?? '')),
+        ]);
+    }
+    foreach ($serviceHubDefaults as $key => $defaults) {
+        if (!isset($serviceCards[$key])) {
+            $serviceCards[$key] = array_merge($defaults, [
+                'link' => route_url($key),
+                'image' => '',
+                'raw_image' => '',
+            ]);
+        }
+    }
+
+    render_head($meta);
+    render_header(route_url('services'));
+    ?>
+    <section class="page-hero page-hero--services-hub">
+        <div class="container services-hub-hero">
+            <div class="services-hub-hero__content">
+                <p class="eyebrow"><?= e($page['page_type'] ?: 'Services') ?></p>
+                <h1><?= e($page['title'] ?: 'Services EMAE') ?></h1>
+                <p class="services-hub-hero__lead"><?= e($page['excerpt'] ?: 'Découvrez nos pôles métiers et accédez à des pages service complètes pour l’électricité, la plomberie, le chauffage et la climatisation.') ?></p>
+                <div class="hero__actions services-hub-hero__actions">
+                    <a class="btn btn--primary" href="<?= e(route_url('quote')) ?>">Demander un devis</a>
+                    <a class="btn btn--outline" href="<?= e(company_phone_link()) ?>">Nous appeler</a>
+                </div>
+                <div class="services-hub-tabs" role="navigation" aria-label="Accès aux services">
+                    <?php foreach ($serviceCards as $card): ?>
+                        <a class="services-hub-tab" href="<?= e($card['link']) ?>">
+                            <span class="services-hub-tab__icon"><?= e($card['icon']) ?></span>
+                            <span><?= e($card['title']) ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="services-hub-hero__panel card">
+                <p class="eyebrow eyebrow--light">Page services complète</p>
+                <h2>Une vitrine métier pensée pour convertir vos visiteurs</h2>
+                <ul class="services-hub-hero__points">
+                    <li>Accès rapide à chaque spécialité : électricité, plomberie, chauffage, climatisation.</li>
+                    <li>Emplacements prévus pour vos photos de chantier, vos textes métier et vos arguments commerciaux.</li>
+                    <li>Design premium cohérent avec l’univers EMAE et appels à l’action visibles.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--soft services-hub-section">
+        <div class="container">
+            <div class="section-heading section-heading--center">
+                <p class="eyebrow">Pôles d’intervention</p>
+                <h2>Choisissez votre domaine d’intervention</h2>
+                <p>Chaque bloc dirige vers une page service dédiée, avec vos photos, votre texte et vos arguments de conversion.</p>
+            </div>
+            <div class="services-hub-cards">
+                <?php foreach ($serviceCards as $card): ?>
+                    <article class="services-hub-card card">
+                        <a class="services-hub-card__media" href="<?= e($card['link']) ?>">
+                            <?php if ($card['raw_image'] !== ''): ?>
+                                <img src="<?= e($card['image']) ?>" alt="<?= e($card['title']) ?>">
+                            <?php else: ?>
+                                <div class="services-hub-card__placeholder">
+                                    <span><?= e($card['photo_label']) ?></span>
+                                </div>
+                            <?php endif; ?>
+                            <div class="services-hub-card__overlay"></div>
+                            <div class="services-hub-card__badge"><?= e($card['icon']) ?></div>
+                        </a>
+                        <div class="services-hub-card__body">
+                            <h3><?= e($card['title']) ?></h3>
+                            <p><?= e($card['lead']) ?></p>
+                            <ul class="services-hub-card__list">
+                                <?php foreach ($card['points'] as $point): ?>
+                                    <li><?= e($point) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <a class="btn btn--outline btn--sm" href="<?= e($card['link']) ?>"><?= e($card['cta']) ?></a>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <section class="section services-hub-section">
+        <div class="container">
+            <div class="section-heading section-heading--center">
+                <p class="eyebrow">Pages dédiées</p>
+                <h2>Une structure pro pour présenter chaque métier</h2>
+                <p>Un modèle plus crédible qu’une simple page liste : photos, textes, interventions, rassurance et appel à l’action.</p>
+            </div>
+            <div class="services-hub-feature-list">
+                <?php foreach ($serviceCards as $key => $card): ?>
+                    <article class="services-hub-feature <?= $key === 'plomberie' || $key === 'climatisation' ? 'services-hub-feature--reverse' : '' ?>">
+                        <div class="services-hub-feature__content">
+                            <p class="eyebrow"><?= e($card['eyebrow']) ?></p>
+                            <h3><?= e($card['title']) ?> : une page métier complète</h3>
+                            <p><?= e($card['lead']) ?></p>
+                            <ul class="services-hub-feature__points">
+                                <?php foreach ($card['points'] as $point): ?>
+                                    <li><?= e($point) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <div class="services-hub-feature__actions">
+                                <a class="btn btn--primary" href="<?= e($card['link']) ?>">Voir la page <?= e(mb_strtolower($card['title'], 'UTF-8')) ?></a>
+                            </div>
+                        </div>
+                        <div class="services-hub-feature__media card">
+                            <?php if ($card['raw_image'] !== ''): ?>
+                                <img src="<?= e($card['image']) ?>" alt="<?= e($card['title']) ?>">
+                            <?php else: ?>
+                                <div class="services-hub-feature__placeholder">
+                                    <strong><?= e($card['photo_label']) ?></strong>
+                                    <span>Ajoutez ici une photo chantier, une installation, ou un visuel premium lié au service.</span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--soft services-hub-section">
+        <div class="container">
+            <div class="section-heading section-heading--center">
+                <p class="eyebrow">Photos & contenu</p>
+                <h2>Des emplacements pensés pour vos photos et votre texte</h2>
+                <p>Utilisez cette page pour mettre en avant vos réalisations, vos chantiers et les détails qui rassurent vos futurs clients.</p>
+            </div>
+            <div class="services-hub-gallery">
+                <article class="services-hub-gallery__card card">
+                    <div class="services-hub-gallery__media services-hub-gallery__media--placeholder"><span>Emplacement photo 1</span></div>
+                    <h3>Photo chantier ou dépannage</h3>
+                    <p>Ajoutez une photo réelle de chantier pour rendre la page plus crédible et plus concrète.</p>
+                </article>
+                <article class="services-hub-gallery__card card">
+                    <div class="services-hub-gallery__media services-hub-gallery__media--placeholder"><span>Emplacement photo 2</span></div>
+                    <h3>Texte technique ou argument commercial</h3>
+                    <p>Expliquez votre méthode, votre rapidité d’intervention ou votre spécialisation métier.</p>
+                </article>
+                <article class="services-hub-gallery__card card">
+                    <div class="services-hub-gallery__media services-hub-gallery__media--placeholder"><span>Emplacement photo 3</span></div>
+                    <h3>Avant / après, maintenance, installation</h3>
+                    <p>Montrez vos réalisations et structurez votre page pour qu’elle inspire confiance dès le premier écran.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section services-hub-section">
+        <div class="container">
+            <div class="section-heading section-heading--center">
+                <p class="eyebrow">Pourquoi cette page ?</p>
+                <h2>Une page générale qui ouvre vers les bonnes pages métier</h2>
+            </div>
+            <div class="services-hub-benefits">
+                <article class="card services-hub-benefit"><strong>Navigation claire</strong><p>Le visiteur comprend immédiatement vos domaines d’intervention et choisit son besoin.</p></article>
+                <article class="card services-hub-benefit"><strong>Meilleure conversion</strong><p>Des blocs clairs, des photos, du texte rassurant et des boutons visibles augmentent la prise de contact.</p></article>
+                <article class="card services-hub-benefit"><strong>Base SEO locale</strong><p>Chaque service peut ensuite avoir sa propre page métier optimisée par ville ou par type d’intervention.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--soft services-hub-section">
+        <div class="container">
+            <div class="services-hub-cta card">
+                <div>
+                    <p class="eyebrow">Besoin d’un accompagnement ?</p>
+                    <h2>Un doute sur le service à choisir ? EMAE vous oriente rapidement.</h2>
+                    <p>Expliquez votre besoin, nous vous redirigeons vers le bon métier et la bonne intervention.</p>
+                </div>
+                <div class="hero__actions">
+                    <a class="btn btn--primary" href="<?= e(company_phone_link()) ?>">Appeler maintenant</a>
+                    <a class="btn btn--outline" href="<?= e(route_url('quote')) ?>">Demander un devis</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php
+    render_footer();
+    exit;
+}
+
 if (in_array($route, ['quote', 'contact'], true)) {
     $page = page_by_slug($route);
     $meta = seo_defaults($route, $page);
