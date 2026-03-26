@@ -2386,3 +2386,331 @@ hr {
     justify-content: center;
   }
 }
+
+/* ===== Pages service EMAE ===== */
+.page-hero--service-emae {
+  padding: 4.4rem 0 3.2rem;
+}
+
+.service-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 460px);
+  gap: 2rem;
+  align-items: center;
+}
+
+.service-hero__lead {
+  max-width: 760px;
+  color: #d9e2ff;
+  font-size: 1.08rem;
+}
+
+.service-hero__summary {
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(247,249,255,.96));
+  border: 1px solid rgba(11,22,65,.08);
+  box-shadow: 0 24px 64px rgba(7,17,41,.14);
+}
+
+.service-hero__summary h2 {
+  margin: 0 0 1rem;
+  color: var(--surface-navy);
+  font-size: clamp(1.65rem, 2.6vw, 2.2rem);
+  line-height: 1.12;
+}
+
+.service-hero__points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: .8rem;
+}
+
+.service-hero__points li {
+  position: relative;
+  padding-left: 1.3rem;
+  color: var(--muted);
+}
+
+.service-hero__points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .58rem;
+  width: .45rem;
+  height: .45rem;
+  border-radius: 999px;
+  background: var(--site-primary, #ee7d1a);
+}
+
+.service-page-section {
+  scroll-margin-top: 96px;
+}
+
+.service-interventions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.service-intervention-card {
+  min-height: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(11,22,65,.08);
+  text-align: center;
+}
+
+.service-intervention-card__icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 1.55rem;
+  background: linear-gradient(180deg, #edf2ff, #dce7ff);
+  color: var(--surface-navy-2);
+}
+
+.service-intervention-card h3,
+.service-step h3,
+.service-contact-card h3,
+.service-trust__highlight h3 {
+  margin: 0 0 .55rem;
+  color: var(--surface-navy);
+}
+
+.service-intervention-card p,
+.service-step p,
+.service-contact-card p,
+.service-faq-item p,
+.service-trust__item p,
+.service-trust__highlight p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.service-trust {
+  display: grid;
+  gap: 1.2rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.service-trust__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .9rem;
+}
+
+.service-trust__item {
+  border-radius: 18px;
+  background: #f7faff;
+  border: 1px solid rgba(11,22,65,.06);
+  padding: 1rem 1.05rem;
+}
+
+.service-trust__item strong {
+  display: block;
+  margin-bottom: .4rem;
+  color: var(--surface-navy);
+}
+
+.service-trust__highlight {
+  border-radius: 20px;
+  border: 1.5px solid rgba(57, 91, 255, .65);
+  padding: 1.3rem 1.4rem;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(247,250,255,.8), rgba(255,255,255,.96));
+}
+
+.service-trust__label {
+  margin: 0 0 .35rem;
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.service-trust__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.service-trust__footer span {
+  color: var(--surface-navy-2);
+  font-weight: 700;
+}
+
+.section-heading {
+  max-width: 760px;
+  margin-bottom: 1.6rem;
+}
+
+.section-heading--center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.service-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+.service-step {
+  text-align: center;
+  position: relative;
+  padding-top: 3rem;
+}
+
+.service-step__number {
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  transform: translateX(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: white;
+  background: linear-gradient(180deg, #4a67ff 0%, #6b4fff 100%);
+  box-shadow: 0 12px 24px rgba(75, 83, 255, .28);
+}
+
+.service-zones {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.service-zones__chips {
+  justify-content: center;
+}
+
+.service-zones__chips span {
+  background: #f5f8ff;
+  color: var(--surface-navy);
+  border: 1px solid #d7e0f8;
+}
+
+.service-faq-list {
+  display: grid;
+  gap: .9rem;
+}
+
+.service-faq-item {
+  padding: 0;
+  overflow: hidden;
+}
+
+.service-faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 1.15rem 1.25rem;
+  font-weight: 700;
+  color: var(--surface-navy);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.service-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.service-faq-item summary::after {
+  content: "+";
+  font-size: 1.25rem;
+  color: var(--surface-navy-2);
+}
+
+.service-faq-item[open] summary::after {
+  content: "−";
+}
+
+.service-faq-item p {
+  padding: 0 1.25rem 1.15rem;
+}
+
+.service-contact-panel {
+  align-items: start;
+}
+
+.service-contact-side {
+  display: grid;
+  gap: 1rem;
+}
+
+.service-contact-card .contact-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.service-contact-card .contact-list div {
+  display: grid;
+  gap: .2rem;
+}
+
+.service-contact-card .contact-list strong,
+.service-contact-benefits li::before {
+  color: var(--surface-navy-2);
+}
+
+.service-contact-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: .8rem;
+}
+
+.service-contact-benefits li {
+  position: relative;
+  padding-left: 1.2rem;
+  color: var(--muted);
+}
+
+.service-contact-benefits li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 800;
+}
+
+.service-page-section--content .rich-content {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+}
+
+@media (max-width: 1100px) {
+  .service-hero__grid,
+  .service-steps-grid,
+  .service-interventions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .service-trust__grid,
+  .service-contact-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .service-hero__grid,
+  .service-interventions-grid,
+  .service-steps-grid,
+  .service-trust__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-trust__footer {
+    align-items: stretch;
+  }
+
+  .service-trust__footer .btn {
+    width: 100%;
+  }
+}

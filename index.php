@@ -499,6 +499,363 @@ if (in_array($route, ['quote', 'contact'], true)) {
 
 $page = page_by_slug($route);
 if ($page) {
+    $serviceContext = mb_strtolower(trim($route . ' ' . (string) ($page['slug'] ?? '') . ' ' . (string) ($page['title'] ?? '')), 'UTF-8');
+    $serviceTemplateKey = null;
+    if (str_contains($serviceContext, 'electric')) {
+        $serviceTemplateKey = 'electricite';
+    } elseif (str_contains($serviceContext, 'plomb')) {
+        $serviceTemplateKey = 'plomberie';
+    } elseif (str_contains($serviceContext, 'chauff')) {
+        $serviceTemplateKey = 'chauffage';
+    } elseif (str_contains($serviceContext, 'clim') || str_contains($serviceContext, 'cvc')) {
+        $serviceTemplateKey = 'climatisation';
+    }
+
+    $serviceTemplates = [
+        'electricite' => [
+            'eyebrow' => 'Interventions électricité',
+            'hero_title' => 'Votre électricien EMAE pour le dépannage, la mise en sécurité et la rénovation.',
+            'hero_lead' => 'Intervention rapide, communication claire et accompagnement professionnel pour vos pannes, tableaux électriques et remises en conformité.',
+            'interventions_title' => 'Nos interventions en électricité',
+            'interventions_lead' => 'Voici les situations dans lesquelles EMAE peut intervenir rapidement.',
+            'interventions' => [
+                ['icon' => '⚡', 'title' => 'Panne électrique', 'text' => 'Recherche de panne et remise en service de vos circuits et équipements.'],
+                ['icon' => '🧰', 'title' => 'Tableau électrique', 'text' => 'Réparation, remplacement ou sécurisation de tableau et protections.'],
+                ['icon' => '🔌', 'title' => 'Prises et circuits', 'text' => 'Dépannage des prises, lignes dédiées et circuits défaillants.'],
+                ['icon' => '💡', 'title' => 'Éclairage', 'text' => 'Remise en service et modernisation de vos éclairages intérieurs et extérieurs.'],
+                ['icon' => '🏗️', 'title' => 'Installation électrique', 'text' => 'Ajout ou création d’alimentations pour vos équipements techniques.'],
+                ['icon' => '🛡️', 'title' => 'Mise aux normes', 'text' => 'Mise en sécurité, protections adaptées et conformité des installations.'],
+                ['icon' => '🏢', 'title' => 'Rénovation', 'text' => 'Modernisation électrique en logement, commerce ou bâtiment technique.'],
+                ['icon' => '🚨', 'title' => 'Urgence 24/7', 'text' => 'Astreinte et intervention pour limiter l’arrêt d’activité et sécuriser le site.'],
+            ],
+            'trust_title' => 'Besoin d’un électricien ?',
+            'trust_lead' => 'Une intervention claire, professionnelle et adaptée à votre bâtiment.',
+            'benefits' => [
+                'Techniciens qualifiés et intervention sécurisée',
+                'Diagnostic clair avant travaux complémentaires',
+                'Déplacement rapide selon votre zone',
+                'Compte rendu et facturation propre en fin d’intervention',
+            ],
+            'highlight_title' => 'Dépannage électrique & mise en sécurité',
+            'highlight_text' => 'Devis annoncé avant intervention • Recherche de panne • Remise en service',
+            'zones_title' => 'Nos zones d’intervention 24h/24',
+            'zones_lead' => 'Interventions sur vos secteurs couverts avec organisation claire des urgences et des rendez-vous.',
+            'zones' => ['Paris (75)', 'Seine-et-Marne (77)', 'Yvelines (78)', 'Essonne (91)', 'Hauts-de-Seine (92)', 'Seine-Saint-Denis (93)', 'Val-de-Marne (94)', 'Val-d’Oise (95)'],
+            'faq' => [
+                ['q' => 'Intervenez-vous pour les pannes électriques urgentes ?', 'a' => 'Oui, EMAE organise les demandes urgentes pour sécuriser l’installation, rechercher la panne et remettre en service quand cela est possible.'],
+                ['q' => 'Pouvez-vous remplacer un tableau électrique ?', 'a' => 'Oui, nous pouvons diagnostiquer l’existant, sécuriser les départs et proposer un remplacement ou une modernisation adaptée.'],
+                ['q' => 'Faites-vous les remises en conformité ?', 'a' => 'Oui, nous intervenons pour la mise en sécurité et les travaux électriques nécessaires à une installation plus fiable.'],
+                ['q' => 'Intervenez-vous aussi pour l’éclairage ?', 'a' => 'Oui, dépannage, remplacement, modernisation LED et remise en service des circuits d’éclairage.'],
+                ['q' => 'Donnez-vous un devis avant travaux ?', 'a' => 'Oui, la situation est expliquée clairement et la suite de l’intervention est annoncée avant validation.'],
+                ['q' => 'Travaillez-vous en logement et en local professionnel ?', 'a' => 'Oui, EMAE intervient aussi bien sur l’habitat, les commerces que les bâtiments techniques.'],
+            ],
+        ],
+        'plomberie' => [
+            'eyebrow' => 'Interventions plomberie',
+            'hero_title' => 'Votre plombier EMAE pour les fuites, réparations sanitaires et remises en service.',
+            'hero_lead' => 'Recherche de fuite, dépannage rapide et maintenance courante avec une communication claire avant intervention.',
+            'interventions_title' => 'Nos interventions en plomberie',
+            'interventions_lead' => 'Voici les situations dans lesquelles EMAE peut intervenir rapidement.',
+            'interventions' => [
+                ['icon' => '💧', 'title' => 'Recherche de fuite', 'text' => 'Localisation et réparation des fuites visibles ou suspectées sur vos réseaux.'],
+                ['icon' => '🚿', 'title' => 'Sanitaires', 'text' => 'Réparation de WC, robinetterie, mécanismes, évacuations et accessoires sanitaires.'],
+                ['icon' => '🧯', 'title' => 'Urgence plomberie', 'text' => 'Mise en sécurité temporaire pour limiter les dégâts et rétablir le service.'],
+                ['icon' => '🔩', 'title' => 'Réseaux d’eau', 'text' => 'Intervention sur tuyauteries, alimentation, petits réseaux et raccordements.'],
+                ['icon' => '🛁', 'title' => 'Équipements', 'text' => 'Remplacement d’évier, robinet, chasse d’eau, siphon ou appareil sanitaire.'],
+                ['icon' => '🧼', 'title' => 'Entretien courant', 'text' => 'Maintenance et vérifications pour limiter les dysfonctionnements récurrents.'],
+                ['icon' => '🏢', 'title' => 'Locaux & commerces', 'text' => 'Organisation des interventions sur bâtiment occupé ou activité ouverte.'],
+                ['icon' => '📋', 'title' => 'Diagnostic clair', 'text' => 'Compte rendu simple, proposition d’action et chiffrage lisible.'],
+            ],
+            'trust_title' => 'Besoin d’un plombier ?',
+            'trust_lead' => 'Une prise en charge rapide pour limiter l’impact sur votre bâtiment.',
+            'benefits' => [
+                'Recherche de fuite et remise en service rapide',
+                'Intervention propre et sécurisée',
+                'Communication claire avant remplacement de matériel',
+                'Facturation conforme et traçable',
+            ],
+            'highlight_title' => 'Fuite, dépannage sanitaire & maintenance',
+            'highlight_text' => 'Diagnostic • Réparation • Remplacement d’équipements',
+            'zones_title' => 'Nos zones d’intervention 24h/24',
+            'zones_lead' => 'Organisation des urgences et rendez-vous plomberie selon votre secteur.',
+            'zones' => ['Paris (75)', 'Seine-et-Marne (77)', 'Val-de-Marne (94)', 'Occitanie', 'Locaux professionnels', 'Commerces', 'Habitat', 'Maintenance planifiée'],
+            'faq' => [
+                ['q' => 'Pouvez-vous intervenir pour une fuite urgente ?', 'a' => 'Oui, EMAE peut sécuriser, diagnostiquer et proposer la remise en service adaptée selon la panne constatée.'],
+                ['q' => 'Faites-vous le remplacement de robinetterie ?', 'a' => 'Oui, nous remplaçons les équipements défectueux et contrôlons le bon fonctionnement après intervention.'],
+                ['q' => 'Intervenez-vous sur des locaux professionnels ?', 'a' => 'Oui, nous adaptons l’intervention pour limiter l’impact sur l’activité du site.'],
+                ['q' => 'Le devis est-il annoncé avant travaux ?', 'a' => 'Oui, les actions complémentaires sont expliquées avant validation.'],
+                ['q' => 'Travaillez-vous aussi sur l’entretien ?', 'a' => 'Oui, EMAE réalise aussi des actions de maintenance courante et de remise en état.'],
+                ['q' => 'Intervenez-vous sur l’évacuation et les siphons ?', 'a' => 'Oui, selon la demande, nous traitons aussi les organes d’évacuation et les raccordements courants.'],
+            ],
+        ],
+        'chauffage' => [
+            'eyebrow' => 'Interventions chauffage',
+            'hero_title' => 'Votre chauffagiste EMAE pour le diagnostic, le dépannage et l’optimisation des équipements.',
+            'hero_lead' => 'EMAE intervient pour remettre en service vos installations de chauffage et améliorer leur fonctionnement.',
+            'interventions_title' => 'Nos interventions en chauffage',
+            'interventions_lead' => 'Voici les situations dans lesquelles EMAE peut intervenir rapidement.',
+            'interventions' => [
+                ['icon' => '🔥', 'title' => 'Panne chauffage', 'text' => 'Diagnostic de défaut et remise en service des équipements de chauffage.'],
+                ['icon' => '🌡️', 'title' => 'Régulation', 'text' => 'Contrôle des thermostats, sondes et organes de commande.'],
+                ['icon' => '♨️', 'title' => 'Production de chaleur', 'text' => 'Vérification des organes essentiels et continuité de fonctionnement.'],
+                ['icon' => '🛠️', 'title' => 'Réglages', 'text' => 'Optimisation des réglages pour améliorer confort et stabilité.'],
+                ['icon' => '🏢', 'title' => 'Site occupé', 'text' => 'Organisation des interventions sur logements, bureaux et bâtiments techniques.'],
+                ['icon' => '📊', 'title' => 'Contrôle de fonctionnement', 'text' => 'Vérification visuelle et contrôle des points importants après remise en service.'],
+                ['icon' => '🚨', 'title' => 'Urgence de continuité', 'text' => 'Prise en charge des pannes pour limiter l’arrêt de chauffage.'],
+                ['icon' => '📋', 'title' => 'Compte rendu clair', 'text' => 'Explication de la panne, des actions et des suites recommandées.'],
+            ],
+            'trust_title' => 'Besoin d’un chauffagiste ?',
+            'trust_lead' => 'Une intervention structurée pour retrouver rapidement du confort et de la continuité.',
+            'benefits' => [
+                'Diagnostic clair et remise en service',
+                'Réglages et optimisation des performances',
+                'Intervention adaptée à l’exploitation du site',
+                'Compte rendu et préconisations utiles',
+            ],
+            'highlight_title' => 'Dépannage chauffage & optimisation',
+            'highlight_text' => 'Diagnostic • Contrôle • Remise en service',
+            'zones_title' => 'Nos zones d’intervention 24h/24',
+            'zones_lead' => 'Organisation des urgences chauffage selon vos zones couvertes.',
+            'zones' => ['Île-de-France', 'Occitanie', 'Paris', 'Seine-et-Marne', 'Val-de-Marne', 'Locaux techniques', 'Commerces', 'Habitat'],
+            'faq' => [
+                ['q' => 'Pouvez-vous intervenir pour un chauffage qui ne démarre plus ?', 'a' => 'Oui, EMAE réalise le diagnostic initial et intervient pour remettre en service quand cela est possible.'],
+                ['q' => 'Faites-vous les réglages de régulation ?', 'a' => 'Oui, nous pouvons contrôler et ajuster les réglages utiles au bon fonctionnement.'],
+                ['q' => 'Intervenez-vous sur des bâtiments occupés ?', 'a' => 'Oui, l’intervention est organisée pour limiter les gênes et sécuriser le site.'],
+                ['q' => 'Le devis est-il annoncé avant la suite ?', 'a' => 'Oui, les actions complémentaires sont expliquées avant validation.'],
+                ['q' => 'Faites-vous aussi la maintenance ?', 'a' => 'Oui, EMAE peut intervenir dans une logique de dépannage comme de maintenance.'],
+                ['q' => 'Travaillez-vous sur chauffage collectif ou individuel ?', 'a' => 'Nous adaptons l’intervention au contexte du site et à la nature de l’installation.'],
+            ],
+        ],
+        'climatisation' => [
+            'eyebrow' => 'Interventions climatisation',
+            'hero_title' => 'Votre spécialiste EMAE pour le dépannage, l’entretien et la remise en service de climatisation.',
+            'hero_lead' => 'Diagnostic de dysfonctionnement, entretien courant et contrôle des performances pour vos installations de rafraîchissement.',
+            'interventions_title' => 'Nos interventions en climatisation',
+            'interventions_lead' => 'Voici les situations dans lesquelles EMAE peut intervenir rapidement.',
+            'interventions' => [
+                ['icon' => '❄️', 'title' => 'Panne climatisation', 'text' => 'Diagnostic et remise en service des équipements de climatisation et rafraîchissement.'],
+                ['icon' => '🧼', 'title' => 'Entretien courant', 'text' => 'Nettoyage, vérifications visuelles et remise en état des points accessibles.'],
+                ['icon' => '🌬️', 'title' => 'Qualité de soufflage', 'text' => 'Contrôle du fonctionnement et de la diffusion d’air.'],
+                ['icon' => '🛠️', 'title' => 'Réglages', 'text' => 'Optimisation des paramètres utiles au confort et à la stabilité de fonctionnement.'],
+                ['icon' => '🏢', 'title' => 'Locaux & commerces', 'text' => 'Interventions compatibles avec l’exploitation du site et les usages.'],
+                ['icon' => '📈', 'title' => 'Contrôle des performances', 'text' => 'Analyse simple du comportement de l’installation après intervention.'],
+                ['icon' => '🚨', 'title' => 'Dépannage prioritaire', 'text' => 'Prise en charge rapide des défauts bloquants ou gênants.'],
+                ['icon' => '📋', 'title' => 'Compte rendu', 'text' => 'Explication claire de la situation, des actions menées et des suites.'],
+            ],
+            'trust_title' => 'Besoin d’un spécialiste climatisation ?',
+            'trust_lead' => 'Une intervention claire pour retrouver du confort et un fonctionnement stable.',
+            'benefits' => [
+                'Diagnostic clair du dysfonctionnement',
+                'Entretien et remise en service',
+                'Contrôle des performances après intervention',
+                'Organisation adaptée à votre bâtiment',
+            ],
+            'highlight_title' => 'Dépannage, entretien & remise en service',
+            'highlight_text' => 'Confort • Contrôle • Réponse rapide',
+            'zones_title' => 'Nos zones d’intervention 24h/24',
+            'zones_lead' => 'Interventions sur vos secteurs couverts avec organisation simple des urgences et rendez-vous.',
+            'zones' => ['Île-de-France', 'Occitanie', 'Paris', 'Seine-et-Marne', 'Val-de-Marne', 'Bureaux', 'Commerces', 'Sites techniques'],
+            'faq' => [
+                ['q' => 'Pouvez-vous intervenir pour une climatisation qui ne souffle plus correctement ?', 'a' => 'Oui, EMAE peut diagnostiquer la panne, contrôler le fonctionnement et proposer la remise en service adaptée.'],
+                ['q' => 'Faites-vous l’entretien courant ?', 'a' => 'Oui, entretien, nettoyage et vérifications utiles selon le contexte de l’installation.'],
+                ['q' => 'Intervenez-vous sur des commerces ou bureaux ?', 'a' => 'Oui, nous adaptons l’intervention au site et à ses contraintes d’exploitation.'],
+                ['q' => 'Le devis est-il annoncé avant travaux complémentaires ?', 'a' => 'Oui, les suites éventuelles sont expliquées avant validation.'],
+                ['q' => 'Travaillez-vous aussi sur les réglages ?', 'a' => 'Oui, nous pouvons optimiser les réglages utiles au confort et à la stabilité de fonctionnement.'],
+                ['q' => 'Proposez-vous un compte rendu de passage ?', 'a' => 'Oui, nous expliquons les actions réalisées et les points à surveiller après intervention.'],
+            ],
+        ],
+    ];
+
+    if ($serviceTemplateKey !== null && isset($serviceTemplates[$serviceTemplateKey])) {
+        $serviceData = $serviceTemplates[$serviceTemplateKey];
+        $meta = seo_defaults($route, $page);
+        render_head($meta);
+        render_header(route_url($route));
+        ?>
+        <section class="page-hero page-hero--service-emae">
+            <div class="container service-hero__grid">
+                <div class="service-hero__content">
+                    <p class="eyebrow"><?= e($serviceData['eyebrow']) ?></p>
+                    <h1><?= e($page['title']) ?></h1>
+                    <p class="service-hero__lead"><?= e($serviceData['hero_lead']) ?></p>
+                    <div class="hero__chips service-hero__chips">
+                        <span><?= e($serviceData['interventions'][0]['title']) ?></span>
+                        <span>Intervention rapide</span>
+                        <span><?= e(company_regions()) ?></span>
+                    </div>
+                    <div class="hero__actions service-hero__actions">
+                        <a class="btn btn--primary" href="<?= e(company_phone_link()) ?>">Nous appeler maintenant</a>
+                        <a class="btn btn--outline" href="<?= e(route_url('quote')) ?>">Demander un devis</a>
+                    </div>
+                </div>
+                <div class="service-hero__summary card">
+                    <p class="eyebrow eyebrow--light">Intervention EMAE</p>
+                    <h2><?= e($serviceData['hero_title']) ?></h2>
+                    <ul class="service-hero__points">
+                        <li>Diagnostic clair avant toute suite d’intervention.</li>
+                        <li>Communication simple avec un interlocuteur technique.</li>
+                        <li>Organisation adaptée au logement, commerce ou bâtiment technique.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section--soft service-page-section">
+            <div class="container">
+                <div class="section-heading section-heading--center">
+                    <p class="eyebrow"><?= e($serviceData['eyebrow']) ?></p>
+                    <h2><?= e($serviceData['interventions_title']) ?></h2>
+                    <p><?= e($serviceData['interventions_lead']) ?></p>
+                </div>
+                <div class="service-interventions-grid">
+                    <?php foreach ($serviceData['interventions'] as $item): ?>
+                        <article class="service-intervention-card card">
+                            <div class="service-intervention-card__icon"><?= e($item['icon']) ?></div>
+                            <h3><?= e($item['title']) ?></h3>
+                            <p><?= e($item['text']) ?></p>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+
+        <section class="section service-page-section">
+            <div class="container">
+                <div class="section-heading section-heading--center">
+                    <p class="eyebrow">Accompagnement</p>
+                    <h2><?= e($serviceData['trust_title']) ?></h2>
+                    <p><?= e($serviceData['trust_lead']) ?></p>
+                </div>
+                <div class="service-trust card">
+                    <div class="service-trust__grid">
+                        <?php foreach ($serviceData['benefits'] as $benefit): ?>
+                            <div class="service-trust__item">
+                                <strong><?= e($benefit) ?></strong>
+                                <p>Une intervention structurée, claire et adaptée à votre besoin.</p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="service-trust__highlight">
+                        <p class="service-trust__label"><?= e($serviceData['highlight_title']) ?></p>
+                        <h3><?= e($page['title']) ?></h3>
+                        <p><?= e($serviceData['highlight_text']) ?></p>
+                    </div>
+                    <div class="service-trust__footer">
+                        <span>Intervention sécurisée et communication claire</span>
+                        <a class="btn btn--primary" href="<?= e(company_phone_link()) ?>">Nous appeler maintenant</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section--soft service-page-section">
+            <div class="container">
+                <div class="section-heading section-heading--center">
+                    <p class="eyebrow">Process</p>
+                    <h2>Process en 3 étapes</h2>
+                    <p>Intervention rapide, communication transparente, résultat garanti.</p>
+                </div>
+                <div class="service-steps-grid">
+                    <article class="service-step card"><span class="service-step__number">1</span><h3>Prise de contact</h3><p>Appelez-nous ou remplissez le formulaire pour décrire votre besoin.</p></article>
+                    <article class="service-step card"><span class="service-step__number">2</span><h3>Déplacement rapide</h3><p>Organisation de l’intervention selon votre zone et le niveau de priorité.</p></article>
+                    <article class="service-step card"><span class="service-step__number">3</span><h3>Intervention & suivi</h3><p>Diagnostic, action technique, compte rendu et solutions complémentaires si besoin.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section service-page-section">
+            <div class="container">
+                <div class="section-heading section-heading--center">
+                    <p class="eyebrow">Zones</p>
+                    <h2><?= e($serviceData['zones_title']) ?></h2>
+                    <p><?= e($serviceData['zones_lead']) ?></p>
+                </div>
+                <div class="service-zones card">
+                    <div class="city-list service-zones__chips">
+                        <?php foreach ($serviceData['zones'] as $zone): ?>
+                            <span><?= e($zone) ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section--soft service-page-section">
+            <div class="container">
+                <div class="section-heading section-heading--center">
+                    <p class="eyebrow">Questions fréquentes</p>
+                    <h2>FAQ <?= e(mb_strtolower((string) $page['title'], 'UTF-8')) ?></h2>
+                </div>
+                <div class="service-faq-list">
+                    <?php foreach ($serviceData['faq'] as $faq): ?>
+                        <details class="service-faq-item card">
+                            <summary><?= e($faq['q']) ?></summary>
+                            <p><?= e($faq['a']) ?></p>
+                        </details>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </section>
+
+        <section class="section service-page-section">
+            <div class="container">
+                <div class="section-heading section-heading--center">
+                    <p class="eyebrow">Contact</p>
+                    <h2>Contactez votre <?= e(mb_strtolower((string) $page['title'], 'UTF-8')) ?></h2>
+                    <p>Besoin d’une intervention ou d’un devis ? EMAE vous recontacte rapidement.</p>
+                </div>
+                <div class="split-panel service-contact-panel">
+                    <div class="card form-card">
+                        <h3>Un technicien vous contacte dès réception.</h3>
+                        <form action="<?= e(route_url('quote')) ?>" method="post">
+                            <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
+                            <input type="hidden" name="form_type" value="quote">
+                            <input type="text" name="website" value="" class="hp-field" tabindex="-1" autocomplete="off">
+                            <div class="form-grid">
+                                <label>Nom complet<input type="text" name="full_name" required></label>
+                                <label>Téléphone<input type="tel" name="phone" required></label>
+                            </div>
+                            <div class="form-grid">
+                                <label>Email<input type="email" name="email"></label>
+                                <label>Ville<input type="text" name="city"></label>
+                            </div>
+                            <label>Service<select name="service_type"><option value="<?= e($page['title']) ?>"><?= e($page['title']) ?></option><?php foreach (home_cards() as $card): ?><option value="<?= e($card['title']) ?>"><?= e($card['title']) ?></option><?php endforeach; ?></select></label>
+                            <label>Votre besoin<textarea name="message" required></textarea></label>
+                            <button class="btn btn--primary btn--block" type="submit">Envoyer ma demande</button>
+                        </form>
+                    </div>
+                    <div class="service-contact-side">
+                        <div class="card service-contact-card">
+                            <h3>Informations de contact</h3>
+                            <div class="contact-list">
+                                <div><strong>Téléphone</strong><a href="<?= e(company_phone_link()) ?>"><?= e(company_phone()) ?></a></div>
+                                <div><strong>Zone d’intervention</strong><span><?= e(company_regions()) ?></span></div>
+                                <div><strong>Horaires</strong><span><?= e(company_hours()) ?></span></div>
+                            </div>
+                        </div>
+                        <div class="card service-contact-card">
+                            <h3>Pourquoi nous contacter ?</h3>
+                            <ul class="service-contact-benefits">
+                                <li>Devis gratuit et sans engagement</li>
+                                <li>Intervention rapide selon votre zone</li>
+                                <li>Technicien qualifié et intervention sécurisée</li>
+                                <li>Facture conforme et suivi clair</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <?php if (trim((string) ($page['content_html'] ?? '')) !== ''): ?>
+            <section class="section service-page-section service-page-section--content">
+                <div class="container">
+                    <article class="card rich-content"><?= $page['content_html'] ?></article>
+                </div>
+            </section>
+        <?php endif; ?>
+        <?php render_footer(); exit; }
+
     $meta = seo_defaults($route, $page);
     render_head($meta);
     render_header(route_url($route));
