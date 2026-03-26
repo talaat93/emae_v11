@@ -499,53 +499,85 @@ if ($route === 'services') {
             'icon' => '⚡',
             'eyebrow' => 'Électricité',
             'title' => 'Électricité',
-            'lead' => 'Dépannage, mise en sécurité, tableaux électriques, rénovation et alimentation des équipements techniques.',
+            'subtitle' => 'Dépannage urgent, installation, modernisation et entretien électrique.',
+            'lead' => 'EMAE intervient sur les pannes, les tableaux, les alimentations techniques, les remises en sécurité et les travaux d’amélioration de vos installations.',
+            'offers' => ['Dépannage d’urgence', 'Installation', 'Modernisation', 'Entretien'],
             'points' => [
-                'Recherche de panne et remise en service',
-                'Mise en sécurité et remise en conformité',
-                'Tableaux électriques, TGBT et protection',
+                'Recherche de panne, remise en service et sécurisation',
+                'Tableaux électriques, protections, TGBT et circuits dédiés',
+                'Éclairage, prises, alimentation d’équipements et rénovation',
+            ],
+            'situations' => [
+                'Coupure totale ou partielle',
+                'Mise en sécurité après défaut',
+                'Création ou reprise de circuits',
+                'Modernisation d’installation existante',
             ],
             'cta' => 'Découvrir le service',
-            'photo_label' => 'Emplacement photo électricité',
+            'photo_label' => 'Photo chantier électricité',
         ],
         'plomberie' => [
             'icon' => '🔧',
             'eyebrow' => 'Plomberie',
             'title' => 'Plomberie',
-            'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
+            'subtitle' => 'Urgence plomberie, remise en état, remplacement et entretien.',
+            'lead' => 'Fuite, panne sanitaire, robinetterie, évacuation ou remplacement d’équipement : EMAE prend en charge l’intervention avec une organisation claire.',
+            'offers' => ['Dépannage d’urgence', 'Installation', 'Modernisation', 'Entretien'],
             'points' => [
-                'Recherche de fuite',
-                'Réseaux sanitaires et robinetterie',
-                'Maintenance des installations d’eau',
+                'Recherche de fuite et mise en sécurité',
+                'Sanitaires, robinetterie, réseaux et évacuations',
+                'Remplacement d’équipements et maintenance courante',
+            ],
+            'situations' => [
+                'Fuite apparente ou suspectée',
+                'Remplacement d’un appareil sanitaire',
+                'Problème d’évacuation',
+                'Maintenance préventive du réseau',
             ],
             'cta' => 'Découvrir le service',
-            'photo_label' => 'Emplacement photo plomberie',
+            'photo_label' => 'Photo chantier plomberie',
         ],
         'chauffage' => [
             'icon' => '🔥',
             'eyebrow' => 'Chauffage',
             'title' => 'Chauffage',
-            'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
+            'subtitle' => 'Diagnostic, dépannage, réglage, modernisation et entretien chauffage.',
+            'lead' => 'EMAE intervient pour diagnostiquer les défauts, remettre en service vos équipements et améliorer la stabilité de fonctionnement.',
+            'offers' => ['Dépannage d’urgence', 'Installation', 'Modernisation', 'Entretien'],
             'points' => [
-                'Diagnostic de panne chauffage',
-                'Remise en service et contrôle de fonctionnement',
-                'Optimisation des réglages',
+                'Diagnostic de panne et remise en service',
+                'Réglages, contrôle de fonctionnement et optimisation',
+                'Accompagnement sur remplacement ou modernisation',
+            ],
+            'situations' => [
+                'Chauffage à l’arrêt',
+                'Inconfort ou défaut de régulation',
+                'Entretien et contrôle périodique',
+                'Remise à niveau d’une installation vieillissante',
             ],
             'cta' => 'Découvrir le service',
-            'photo_label' => 'Emplacement photo chauffage',
+            'photo_label' => 'Photo chantier chauffage',
         ],
         'climatisation' => [
             'icon' => '❄️',
             'eyebrow' => 'Climatisation',
             'title' => 'Climatisation',
-            'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
+            'subtitle' => 'Dépannage, entretien, mise en service et optimisation climatisation.',
+            'lead' => 'EMAE prend en charge le diagnostic, l’entretien, la remise en service et les améliorations de vos installations de climatisation et de rafraîchissement.',
+            'offers' => ['Dépannage d’urgence', 'Installation', 'Modernisation', 'Entretien'],
             'points' => [
-                'Diagnostic de dysfonctionnement',
-                'Entretien courant et nettoyage',
-                'Contrôle des performances',
+                'Diagnostic de dysfonctionnement et remise en service',
+                'Entretien courant, nettoyage et contrôle des performances',
+                'Accompagnement sur amélioration ou remplacement',
+            ],
+            'situations' => [
+                'Panne de climatisation',
+                'Perte de performance',
+                'Entretien saisonnier',
+                'Modernisation d’installation existante',
             ],
             'cta' => 'Découvrir le service',
-            'photo_label' => 'Emplacement photo climatisation',
+            'photo_label' => 'Photo chantier climatisation',
         ],
     ];
 
@@ -568,7 +600,7 @@ if ($route === 'services') {
             continue;
         }
         $serviceCards[$key] = array_merge($serviceHubDefaults[$key], [
-            'link' => $slug !== '' ? route_url($slug) : route_url('services'),
+            'link' => $slug !== '' ? route_url($slug) : route_url($key),
             'image' => asset_url((string) ($card['image'] ?? '')),
             'raw_image' => trim((string) ($card['image'] ?? '')),
         ]);
@@ -583,164 +615,150 @@ if ($route === 'services') {
         }
     }
 
+    $serviceTabsLabel = $page['excerpt'] ?: 'Choisissez un métier pour découvrir nos interventions, nos photos et les pages détaillées associées.';
+
     render_head($meta);
     render_header(route_url('services'));
     ?>
-    <section class="page-hero page-hero--services-hub">
-        <div class="container services-hub-hero">
+    <section class="page-hero page-hero--services-hub page-hero--services-hub-v2">
+        <div class="container services-hub-hero services-hub-hero--v2">
             <div class="services-hub-hero__content">
                 <p class="eyebrow"><?= e($page['page_type'] ?: 'Services') ?></p>
-                <h1><?= e($page['title'] ?: 'Services EMAE') ?></h1>
-                <p class="services-hub-hero__lead"><?= e($page['excerpt'] ?: 'Découvrez nos pôles métiers et accédez à des pages service complètes pour l’électricité, la plomberie, le chauffage et la climatisation.') ?></p>
+                <h1><?= e($page['title'] ?: 'Nos services') ?></h1>
+                <p class="services-hub-hero__lead"><?= e($serviceTabsLabel) ?></p>
+                <div class="services-hub-hero__tags">
+                    <span>Dépannage d’urgence</span>
+                    <span>Installation</span>
+                    <span>Modernisation</span>
+                    <span>Entretien</span>
+                </div>
                 <div class="hero__actions services-hub-hero__actions">
                     <a class="btn btn--primary" href="<?= e(route_url('quote')) ?>">Demander un devis</a>
-                    <a class="btn btn--outline" href="<?= e(company_phone_link()) ?>">Nous appeler</a>
-                </div>
-                <div class="services-hub-tabs" role="navigation" aria-label="Accès aux services">
-                    <?php foreach ($serviceCards as $card): ?>
-                        <a class="services-hub-tab" href="<?= e($card['link']) ?>">
-                            <span class="services-hub-tab__icon"><?= e($card['icon']) ?></span>
-                            <span><?= e($card['title']) ?></span>
-                        </a>
-                    <?php endforeach; ?>
+                    <a class="btn btn--outline" href="<?= e(company_phone_link()) ?>">Être rappelé</a>
                 </div>
             </div>
-            <div class="services-hub-hero__panel card">
-                <p class="eyebrow eyebrow--light">Page services complète</p>
-                <h2>Une vitrine métier pensée pour convertir vos visiteurs</h2>
+            <div class="services-hub-hero__panel card services-hub-hero__panel--v2">
+                <p class="eyebrow eyebrow--light">Votre page services</p>
+                <h2>Une page complète pour présenter tous vos pôles métiers.</h2>
                 <ul class="services-hub-hero__points">
-                    <li>Accès rapide à chaque spécialité : électricité, plomberie, chauffage, climatisation.</li>
-                    <li>Emplacements prévus pour vos photos de chantier, vos textes métier et vos arguments commerciaux.</li>
-                    <li>Design premium cohérent avec l’univers EMAE et appels à l’action visibles.</li>
+                    <li>Une navigation directe vers chaque métier depuis le menu Services.</li>
+                    <li>Des blocs détaillés avec photos, texte, prestations et appels à l’action.</li>
+                    <li>Une structure pensée pour rassurer, orienter et convertir.</li>
                 </ul>
+                <div class="services-hub-hero__mini-grid">
+                    <div><strong>4 métiers clés</strong><span>Électricité, plomberie, chauffage, climatisation</span></div>
+                    <div><strong>Photos & texte</strong><span>Des zones prévues pour valoriser tes réalisations</span></div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="section section--soft services-hub-section">
+    <section class="section services-hub-nav-section">
         <div class="container">
-            <div class="section-heading section-heading--center">
-                <p class="eyebrow">Pôles d’intervention</p>
-                <h2>Choisissez votre domaine d’intervention</h2>
-                <p>Chaque bloc dirige vers une page service dédiée, avec vos photos, votre texte et vos arguments de conversion.</p>
-            </div>
-            <div class="services-hub-cards">
-                <?php foreach ($serviceCards as $card): ?>
-                    <article class="services-hub-card card">
-                        <a class="services-hub-card__media" href="<?= e($card['link']) ?>">
-                            <?php if ($card['raw_image'] !== ''): ?>
-                                <img src="<?= e($card['image']) ?>" alt="<?= e($card['title']) ?>">
-                            <?php else: ?>
-                                <div class="services-hub-card__placeholder">
-                                    <span><?= e($card['photo_label']) ?></span>
-                                </div>
-                            <?php endif; ?>
-                            <div class="services-hub-card__overlay"></div>
-                            <div class="services-hub-card__badge"><?= e($card['icon']) ?></div>
-                        </a>
-                        <div class="services-hub-card__body">
-                            <h3><?= e($card['title']) ?></h3>
-                            <p><?= e($card['lead']) ?></p>
-                            <ul class="services-hub-card__list">
-                                <?php foreach ($card['points'] as $point): ?>
-                                    <li><?= e($point) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <a class="btn btn--outline btn--sm" href="<?= e($card['link']) ?>"><?= e($card['cta']) ?></a>
-                        </div>
-                    </article>
+            <div class="services-hub-tabs services-hub-tabs--full" role="navigation" aria-label="Accès aux services">
+                <?php foreach ($serviceCards as $key => $card): ?>
+                    <a class="services-hub-tab services-hub-tab--full" href="#service-<?= e($key) ?>">
+                        <span class="services-hub-tab__icon"><?= e($card['icon']) ?></span>
+                        <span class="services-hub-tab__text">
+                            <strong><?= e($card['title']) ?></strong>
+                            <small><?= e($card['subtitle']) ?></small>
+                        </span>
+                    </a>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <section class="section services-hub-section">
-        <div class="container">
-            <div class="section-heading section-heading--center">
-                <p class="eyebrow">Pages dédiées</p>
-                <h2>Une structure pro pour présenter chaque métier</h2>
-                <p>Un modèle plus crédible qu’une simple page liste : photos, textes, interventions, rassurance et appel à l’action.</p>
-            </div>
-            <div class="services-hub-feature-list">
-                <?php foreach ($serviceCards as $key => $card): ?>
-                    <article class="services-hub-feature <?= $key === 'plomberie' || $key === 'climatisation' ? 'services-hub-feature--reverse' : '' ?>">
-                        <div class="services-hub-feature__content">
-                            <p class="eyebrow"><?= e($card['eyebrow']) ?></p>
-                            <h3><?= e($card['title']) ?> : une page métier complète</h3>
-                            <p><?= e($card['lead']) ?></p>
-                            <ul class="services-hub-feature__points">
-                                <?php foreach ($card['points'] as $point): ?>
-                                    <li><?= e($point) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <div class="services-hub-feature__actions">
-                                <a class="btn btn--primary" href="<?= e($card['link']) ?>">Voir la page <?= e(mb_strtolower($card['title'], 'UTF-8')) ?></a>
+    <?php foreach ($serviceCards as $key => $card): ?>
+        <section class="section services-domain-section <?= $key === 'plomberie' || $key === 'climatisation' ? 'services-domain-section--alt' : '' ?>" id="service-<?= e($key) ?>">
+            <div class="container">
+                <div class="services-domain">
+                    <div class="services-domain__content">
+                        <p class="eyebrow"><?= e($card['eyebrow']) ?></p>
+                        <div class="services-domain__header">
+                            <span class="services-domain__icon"><?= e($card['icon']) ?></span>
+                            <div>
+                                <h2><?= e($card['title']) ?></h2>
+                                <p class="services-domain__subtitle"><?= e($card['subtitle']) ?></p>
                             </div>
                         </div>
-                        <div class="services-hub-feature__media card">
+                        <p class="services-domain__lead"><?= e($card['lead']) ?></p>
+
+                        <div class="services-domain__offers">
+                            <?php foreach ($card['offers'] as $offer): ?>
+                                <span><?= e($offer) ?></span>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <div class="services-domain__grid">
+                            <div class="services-domain__panel card">
+                                <h3>Ce que nous faisons</h3>
+                                <ul class="services-domain__list">
+                                    <?php foreach ($card['points'] as $point): ?>
+                                        <li><?= e($point) ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                            <div class="services-domain__panel card">
+                                <h3>Exemples d’interventions</h3>
+                                <ul class="services-domain__list">
+                                    <?php foreach ($card['situations'] as $item): ?>
+                                        <li><?= e($item) ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="hero__actions services-domain__actions">
+                            <a class="btn btn--primary" href="<?= e($card['link']) ?>">Voir la page <?= e(mb_strtolower($card['title'], 'UTF-8')) ?></a>
+                            <a class="btn btn--outline" href="<?= e(route_url('quote')) ?>">Demander un devis</a>
+                        </div>
+                    </div>
+
+                    <div class="services-domain__media-wrap">
+                        <div class="services-domain__media card">
                             <?php if ($card['raw_image'] !== ''): ?>
                                 <img src="<?= e($card['image']) ?>" alt="<?= e($card['title']) ?>">
                             <?php else: ?>
-                                <div class="services-hub-feature__placeholder">
-                                    <strong><?= e($card['photo_label']) ?></strong>
-                                    <span>Ajoutez ici une photo chantier, une installation, ou un visuel premium lié au service.</span>
+                                <div class="services-domain__placeholder">
+                                    <span><?= e($card['photo_label']) ?></span>
+                                    <small>Ajoute ici une photo chantier, une intervention, une installation ou un visuel premium lié au service.</small>
                                 </div>
                             <?php endif; ?>
                         </div>
-                    </article>
-                <?php endforeach; ?>
+                        <div class="services-domain__callout card">
+                            <h3><?= e($card['title']) ?> : dépannage, installation, modernisation, entretien</h3>
+                            <p>Une présentation plus détaillée pour montrer vos réalisations, votre méthode d’intervention et vos points forts.</p>
+                            <a class="services-domain__link" href="<?= e($card['link']) ?>">En savoir plus</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    <?php endforeach; ?>
 
-    <section class="section section--soft services-hub-section">
-        <div class="container">
-            <div class="section-heading section-heading--center">
-                <p class="eyebrow">Photos & contenu</p>
-                <h2>Des emplacements pensés pour vos photos et votre texte</h2>
-                <p>Utilisez cette page pour mettre en avant vos réalisations, vos chantiers et les détails qui rassurent vos futurs clients.</p>
-            </div>
-            <div class="services-hub-gallery">
-                <article class="services-hub-gallery__card card">
-                    <div class="services-hub-gallery__media services-hub-gallery__media--placeholder"><span>Emplacement photo 1</span></div>
-                    <h3>Photo chantier ou dépannage</h3>
-                    <p>Ajoutez une photo réelle de chantier pour rendre la page plus crédible et plus concrète.</p>
-                </article>
-                <article class="services-hub-gallery__card card">
-                    <div class="services-hub-gallery__media services-hub-gallery__media--placeholder"><span>Emplacement photo 2</span></div>
-                    <h3>Texte technique ou argument commercial</h3>
-                    <p>Expliquez votre méthode, votre rapidité d’intervention ou votre spécialisation métier.</p>
-                </article>
-                <article class="services-hub-gallery__card card">
-                    <div class="services-hub-gallery__media services-hub-gallery__media--placeholder"><span>Emplacement photo 3</span></div>
-                    <h3>Avant / après, maintenance, installation</h3>
-                    <p>Montrez vos réalisations et structurez votre page pour qu’elle inspire confiance dès le premier écran.</p>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <section class="section services-hub-section">
+    <section class="section section--soft services-hub-section services-hub-section--confidence">
         <div class="container">
             <div class="section-heading section-heading--center">
                 <p class="eyebrow">Pourquoi cette page ?</p>
-                <h2>Une page générale qui ouvre vers les bonnes pages métier</h2>
+                <h2>Une page services plus détaillée, plus claire et plus professionnelle</h2>
+                <p>Le visiteur comprend rapidement vos métiers, clique sur le bon service et trouve une page dédiée crédible avec des photos, du texte et un appel à l’action clair.</p>
             </div>
-            <div class="services-hub-benefits">
-                <article class="card services-hub-benefit"><strong>Navigation claire</strong><p>Le visiteur comprend immédiatement vos domaines d’intervention et choisit son besoin.</p></article>
-                <article class="card services-hub-benefit"><strong>Meilleure conversion</strong><p>Des blocs clairs, des photos, du texte rassurant et des boutons visibles augmentent la prise de contact.</p></article>
-                <article class="card services-hub-benefit"><strong>Base SEO locale</strong><p>Chaque service peut ensuite avoir sa propre page métier optimisée par ville ou par type d’intervention.</p></article>
+            <div class="services-hub-benefits services-hub-benefits--v2">
+                <article class="card services-hub-benefit"><strong>Navigation rapide</strong><p>Un onglet par métier pour accéder directement au bon domaine d’intervention.</p></article>
+                <article class="card services-hub-benefit"><strong>Photos valorisées</strong><p>Des emplacements propres pour afficher vos chantiers, installations, dépannages et modernisations.</p></article>
+                <article class="card services-hub-benefit"><strong>Meilleure conversion</strong><p>Des blocs plus détaillés, des textes plus rassurants et des CTA visibles tout au long de la page.</p></article>
             </div>
         </div>
     </section>
 
-    <section class="section section--soft services-hub-section">
+    <section class="section services-hub-section">
         <div class="container">
-            <div class="services-hub-cta card">
+            <div class="services-hub-cta card services-hub-cta--v2">
                 <div>
-                    <p class="eyebrow">Besoin d’un accompagnement ?</p>
-                    <h2>Un doute sur le service à choisir ? EMAE vous oriente rapidement.</h2>
-                    <p>Expliquez votre besoin, nous vous redirigeons vers le bon métier et la bonne intervention.</p>
+                    <p class="eyebrow">Besoin d’être orienté ?</p>
+                    <h2>Expliquez votre besoin, EMAE vous dirige vers le bon métier.</h2>
+                    <p>Dépannage, entretien, installation ou modernisation : nous vous aidons à choisir le bon service dès le premier contact.</p>
                 </div>
                 <div class="hero__actions">
                     <a class="btn btn--primary" href="<?= e(company_phone_link()) ?>">Appeler maintenant</a>
