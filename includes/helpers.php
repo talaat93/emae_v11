@@ -593,6 +593,163 @@ function hero_feature_cards(array $hero): array
     return array_values(array_filter($features, static fn(array $f): bool => $f['title'] !== '' || $f['text'] !== ''));
 }
 
+
+function hero_banner_settings(): array
+{
+    return [
+        'eyebrow' => setting('home_banner_eyebrow', 'Urgence 24/7'),
+        'title' => setting('home_banner_title', 'Une équipe prête à organiser votre intervention'),
+        'lead' => setting('home_banner_lead', 'Dépannage urgent, réponse rapide, devis clair et intervention planifiée selon votre zone.'),
+        'button1_label' => setting('home_banner_button1_label', 'Appeler maintenant'),
+        'button1_url' => setting('home_banner_button1_url', company_phone_link()),
+        'button2_label' => setting('home_banner_button2_label', 'Demander un devis'),
+        'button2_url' => setting('home_banner_button2_url', 'quote'),
+        'logo_path' => setting('home_banner_logo_path', site_logo_path()),
+    ];
+}
+
+function home_expertise_settings(): array
+{
+    $default = [
+        [
+            'icon' => '⚡',
+            'title' => 'Électricité',
+            'lead' => 'Dépannage, remise en sécurité et travaux électriques pour particuliers et professionnels.',
+            'item_1' => 'Recherche de panne rapide',
+            'item_2' => 'Tableaux, protections et circuits',
+            'item_3' => 'Rénovation et mise en conformité',
+            'link' => 'electricien-meaux',
+        ],
+        [
+            'icon' => '🔧',
+            'title' => 'Plomberie',
+            'lead' => 'Intervention sur fuite, réseau sanitaire, évacuation et remplacement d’équipements.',
+            'item_1' => 'Recherche et réparation de fuite',
+            'item_2' => 'Robinetterie, sanitaires et réseau',
+            'item_3' => 'Entretien et remplacement',
+            'link' => 'plombier-meaux',
+        ],
+        [
+            'icon' => '❄️',
+            'title' => 'Chauffage & climatisation',
+            'lead' => 'Maintenance, dépannage et modernisation de vos systèmes thermiques.',
+            'item_1' => 'Climatisation et PAC',
+            'item_2' => 'Chauffage, ventilation et confort',
+            'item_3' => 'Entretien préventif',
+            'link' => 'climatisation-meaux',
+        ],
+        [
+            'icon' => '🛠️',
+            'title' => 'Maintenance & modernisation',
+            'lead' => 'Accompagnement global pour fiabiliser, améliorer et moderniser vos installations.',
+            'item_1' => 'Contrats d’entretien',
+            'item_2' => 'Remise à niveau technique',
+            'item_3' => 'Solutions durables et évolutives',
+            'link' => 'depannage-paris',
+        ],
+    ];
+
+    $cards = get_json_setting('home_expertise_cards', $default);
+    if (!$cards) {
+        $cards = $default;
+    }
+
+    $normalized = [];
+    foreach ($cards as $index => $card) {
+        if (!is_array($card)) {
+            $card = [];
+        }
+        $fallback = $default[$index] ?? $default[0];
+        $normalized[] = [
+            'icon' => trim((string) ($card['icon'] ?? $fallback['icon'])) ?: $fallback['icon'],
+            'title' => trim((string) ($card['title'] ?? $fallback['title'])) ?: $fallback['title'],
+            'lead' => trim((string) ($card['lead'] ?? $fallback['lead'])) ?: $fallback['lead'],
+            'item_1' => trim((string) ($card['item_1'] ?? $fallback['item_1'])) ?: $fallback['item_1'],
+            'item_2' => trim((string) ($card['item_2'] ?? $fallback['item_2'])) ?: $fallback['item_2'],
+            'item_3' => trim((string) ($card['item_3'] ?? $fallback['item_3'])) ?: $fallback['item_3'],
+            'link' => trim((string) ($card['link'] ?? $fallback['link'])) ?: $fallback['link'],
+        ];
+    }
+
+    return [
+        'eyebrow' => setting('home_expertise_eyebrow', 'Expertise'),
+        'title' => setting('home_expertise_title', 'Notre expertise multitechnique'),
+        'lead' => setting('home_expertise_lead', 'Des interventions claires, organisées et adaptées à chaque pôle métier.'),
+        'cards' => $normalized,
+    ];
+}
+
+function home_reviews_block_settings(): array
+{
+    return [
+        'eyebrow' => setting('home_reviews_eyebrow', 'Avis clients'),
+        'title' => setting('home_reviews_title', 'Des témoignages qui rassurent'),
+        'lead' => setting('home_reviews_lead', 'Un retour d’expérience clair pour renforcer la confiance avant l’intervention.'),
+    ];
+}
+
+function home_quote_panel_settings(): array
+{
+    return [
+        'eyebrow' => setting('home_quote_panel_eyebrow', 'Demande de devis'),
+        'title' => setting('home_quote_panel_title', 'Demande de devis'),
+        'lead' => setting('home_quote_panel_lead', 'Décris ton besoin et reçois une réponse rapide.'),
+        'service_label' => setting('home_quote_panel_service_label', 'Service'),
+        'service_placeholder' => setting('home_quote_panel_service_placeholder', 'Choisir'),
+        'message_label' => setting('home_quote_panel_message_label', 'Votre besoin'),
+        'urgency_label' => setting('home_quote_panel_urgency_label', 'Urgence'),
+        'button_label' => setting('home_quote_panel_button_label', quote_form_options()['submit_label']),
+    ];
+}
+
+function home_zone_settings(): array
+{
+    $defaultCards = [
+        [
+            'title' => 'Intervention locale',
+            'text' => 'Organisation rapide sur les zones prioritaires pour les demandes urgentes et techniques.',
+        ],
+        [
+            'title' => 'Couverture claire',
+            'text' => 'Une communication simple sur les villes, secteurs et délais d’intervention possibles.',
+        ],
+        [
+            'title' => 'Accompagnement fiable',
+            'text' => 'Un contact direct pour confirmer la faisabilité, le passage et le bon niveau d’urgence.',
+        ],
+    ];
+
+    $cards = get_json_setting('home_zone_cards', $defaultCards);
+    if (!$cards) {
+        $cards = $defaultCards;
+    }
+
+    $normalizedCards = [];
+    foreach ($cards as $index => $card) {
+        if (!is_array($card)) {
+            $card = [];
+        }
+        $fallback = $defaultCards[$index] ?? $defaultCards[0];
+        $normalizedCards[] = [
+            'title' => trim((string) ($card['title'] ?? $fallback['title'])) ?: $fallback['title'],
+            'text' => trim((string) ($card['text'] ?? $fallback['text'])) ?: $fallback['text'],
+        ];
+    }
+
+    $badges = get_json_setting('home_zone_badges', ['Île-de-France', 'Occitanie', 'Réponse rapide', 'Devis gratuit']);
+    $badges = array_values(array_filter(array_map(static fn($badge): string => trim((string) $badge), $badges), static fn(string $badge): bool => $badge !== ''));
+
+    return [
+        'eyebrow' => setting('home_zone_eyebrow', 'Zone d’intervention'),
+        'title' => setting('home_zone_title', 'Une zone d’intervention claire et rassurante'),
+        'lead' => setting('home_zone_lead', 'Nous confirmons rapidement si votre secteur est couvert et dans quel délai nous pouvons intervenir.'),
+        'badges' => $badges,
+        'button_label' => setting('home_zone_button_label', 'Nous contacter'),
+        'button_url' => setting('home_zone_button_url', 'contact'),
+        'cards' => $normalizedCards,
+    ];
+}
+
 function public_asset_exists(string $path): bool
 {
     $path = trim($path);
