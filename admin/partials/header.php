@@ -56,6 +56,7 @@ function admin_is_active(array $files, string $section = ''): string
 
       <div class="admin-menu__group-label">Contenus</div>
       <a class="<?= admin_is_active(['pages.php','page_edit.php']) ?>" href="<?= e(url_for('admin/pages.php')) ?>">Pages & landing pages</a>
+      <a class="<?= admin_is_active(['services_builder.php'], 'services_builder') ?>" href="<?= e(url_for('admin/services_builder.php')) ?>">Page services (builder)</a>
       <a class="<?= admin_is_active(['reviews.php']) ?>" href="<?= e(url_for('admin/reviews.php')) ?>">Avis</a>
       <a class="<?= admin_is_active(['quotes.php']) ?>" href="<?= e(url_for('admin/quotes.php')) ?>">Demandes de devis</a>
 

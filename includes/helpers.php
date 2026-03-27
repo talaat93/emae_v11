@@ -192,6 +192,308 @@ function css_value(string $value, string $fallback = ''): string
     return $fallback;
 }
 
+
+function services_builder_type_labels(): array
+{
+    return [
+        'text'       => 'Texte',
+        'image_text' => 'Texte + image',
+        'cards'      => 'Cartes services',
+        'faq'        => 'FAQ',
+        'cta'        => 'CTA final',
+        'html'       => 'HTML libre',
+    ];
+}
+
+function services_builder_block_template(string $type = 'text'): array
+{
+    $type = array_key_exists($type, services_builder_type_labels()) ? $type : 'text';
+
+    $block = [
+        'id'            => 'blk_' . bin2hex(random_bytes(4)),
+        'type'          => $type,
+        'anchor'        => '',
+        'eyebrow'       => '',
+        'title'         => '',
+        'subtitle'      => '',
+        'text'          => '',
+        'html'          => '',
+        'image'         => '',
+        'layout'        => 'image_right',
+        'button_label'  => '',
+        'button_url'    => '',
+        'button2_label' => '',
+        'button2_url'   => '',
+        'background'    => '',
+        'text_color'    => '',
+        'items'         => [],
+    ];
+
+    if ($type === 'text') {
+        $block['eyebrow'] = 'Service';
+        $block['title'] = 'Un bloc texte modifiable';
+        $block['text'] = '<p>Explique ici ton service, tes délais d’intervention, ta zone d’action et ce qui rassure le client.</p>';
+    }
+
+    if ($type === 'image_text') {
+        $block['eyebrow'] = 'Intervention';
+        $block['title'] = 'Texte avec image';
+        $block['text'] = '<p>Présente ici une prestation avec plus de détails, une photo, et un bouton.</p>';
+        $block['layout'] = 'image_right';
+    }
+
+    if ($type === 'cards') {
+        $items = [];
+        foreach (service_cards_settings() as $card) {
+            $items[] = [
+                'title'        => (string) ($card['title'] ?? ''),
+                'text'         => 'Intervention, installation, entretien et dépannage rapide.',
+                'image'        => (string) ($card['image'] ?? ''),
+                'button_label' => 'Découvrir',
+                'button_url'   => (string) ($card['link'] ?? ''),
+            ];
+        }
+
+        $block['eyebrow'] = 'Nos pôles';
+        $block['title'] = 'Nos services';
+        $block['subtitle'] = 'Choisissez le pôle adapté à votre besoin.';
+        $block['background'] = '#f6f8fb';
+        $block['items'] = $items;
+    }
+
+    if ($type === 'faq') {
+        $block['eyebrow'] = 'FAQ';
+        $block['title'] = 'Questions fréquentes';
+        $block['items'] = [
+            [
+                'question' => 'Intervenez-vous en urgence ?',
+                'answer'   => '<p>Oui, EMAE peut intervenir rapidement selon la zone et le créneau.</p>',
+            ],
+            [
+                'question' => 'Proposez-vous aussi l’installation et la maintenance ?',
+                'answer'   => '<p>Oui, nous réalisons le dépannage, l’installation, l’entretien et la modernisation.</p>',
+            ],
+        ];
+    }
+
+    if ($type === 'cta') {
+        $block['eyebrow'] = 'Besoin rapide';
+        $block['title'] = 'Parlez-nous de votre besoin';
+        $block['text'] = '<p>Décrivez votre demande et obtenez une réponse claire, rapide et adaptée.</p>';
+        $block['button_label'] = 'Demander un devis';
+        $block['button_url'] = 'quote';
+        $block['button2_label'] = 'Appeler maintenant';
+        $block['button2_url'] = company_phone_link();
+    }
+
+    if ($type === 'html') {
+        $block['eyebrow'] = 'Bloc libre';
+        $block['title'] = 'HTML libre';
+        $block['html'] = '<div class="card rich-content"><p>Ajoute ici ton HTML libre.</p></div>';
+    }
+
+    return $block;
+}
+
+function services_builder_normalize_block(array $block): array
+{
+    $type = trim((string) ($block['type'] ?? 'text'));
+    if (!array_key_exists($type, services_builder_type_labels())) {
+        $type = 'text';
+    }
+
+    $defaults = services_builder_block_template($type);
+    $normalized = array_merge($defaults, $block);
+
+    $normalized['id'] = trim((string) ($normalized['id'] ?? ''));
+    if ($normalized['id'] === '') {
+        $normalized['id'] = 'blk_' . bin2hex(random_bytes(4));
+    }
+
+    $normalized['type'] = $type;
+    $normalized['anchor'] = trim((string) ($normalized['anchor'] ?? ''));
+    $normalized['eyebrow'] = trim((string) ($normalized['eyebrow'] ?? ''));
+    $normalized['title'] = trim((string) ($normalized['title'] ?? ''));
+    $normalized['subtitle'] = trim((string) ($normalized['subtitle'] ?? ''));
+    $normalized['text'] = (string) ($normalized['text'] ?? '');
+    $normalized['html'] = (string) ($normalized['html'] ?? '');
+    $normalized['image'] = trim((string) ($normalized['image'] ?? ''));
+    $normalized['layout'] = trim((string) ($normalized['layout'] ?? 'image_right'));
+    if (!in_array($normalized['layout'], ['image_left', 'image_right'], true)) {
+        $normalized['layout'] = 'image_right';
+    }
+
+    $normalized['button_label'] = trim((string) ($normalized['button_label'] ?? ''));
+    $normalized['button_url'] = trim((string) ($normalized['button_url'] ?? ''));
+    $normalized['button2_label'] = trim((string) ($normalized['button2_label'] ?? ''));
+    $normalized['button2_url'] = trim((string) ($normalized['button2_url'] ?? ''));
+    $normalized['background'] = trim((string) ($normalized['background'] ?? ''));
+    $normalized['text_color'] = trim((string) ($normalized['text_color'] ?? ''));
+
+    $items = is_array($normalized['items'] ?? null) ? $normalized['items'] : [];
+
+    if ($type === 'cards') {
+        $cleanItems = [];
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $title = trim((string) ($item['title'] ?? ''));
+            $text = trim((string) ($item['text'] ?? ''));
+            $image = trim((string) ($item['image'] ?? ''));
+            $buttonLabel = trim((string) ($item['button_label'] ?? ''));
+            $buttonUrl = trim((string) ($item['button_url'] ?? ''));
+
+            if ($title === '' && $text === '' && $image === '' && $buttonLabel === '' && $buttonUrl === '') {
+                continue;
+            }
+
+            $cleanItems[] = [
+                'title'        => $title,
+                'text'         => $text,
+                'image'        => $image,
+                'button_label' => $buttonLabel,
+                'button_url'   => $buttonUrl,
+            ];
+        }
+
+        $normalized['items'] = $cleanItems ?: services_builder_block_template('cards')['items'];
+    } elseif ($type === 'faq') {
+        $cleanItems = [];
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            $question = trim((string) ($item['question'] ?? ''));
+            $answer = (string) ($item['answer'] ?? '');
+
+            if ($question === '' && trim(strip_tags($answer)) === '') {
+                continue;
+            }
+
+            $cleanItems[] = [
+                'question' => $question,
+                'answer'   => $answer,
+            ];
+        }
+
+        $normalized['items'] = $cleanItems ?: services_builder_block_template('faq')['items'];
+    } else {
+        $normalized['items'] = [];
+    }
+
+    return $normalized;
+}
+
+function services_builder_default_config(): array
+{
+    return [
+        'page' => [
+            'eyebrow'          => 'Nos services',
+            'title'            => 'Dépannage, installation, entretien et modernisation multitechnique',
+            'subtitle'         => 'Électricité, plomberie, chauffage et climatisation : une page claire, rassurante et pensée pour convertir.',
+            'meta_title'       => 'Services | ' . company_name(),
+            'meta_description' => 'Découvrez les services EMAE en électricité, plomberie, chauffage et climatisation.',
+            'hero_background'  => '#0b1641',
+            'hero_text_color'  => '#ffffff',
+            'hero_image'       => '',
+            'primary_label'    => 'Demander un devis',
+            'primary_url'      => 'quote',
+            'secondary_label'  => 'Appeler maintenant',
+            'secondary_url'    => company_phone_link(),
+        ],
+        'blocks' => [
+            services_builder_block_template('text'),
+            services_builder_block_template('cards'),
+            services_builder_block_template('faq'),
+            services_builder_block_template('cta'),
+        ],
+    ];
+}
+
+function services_builder_config(): array
+{
+    $defaults = services_builder_default_config();
+    $saved = get_json_setting('services_page_builder', []);
+
+    $page = array_merge(
+        $defaults['page'],
+        is_array($saved['page'] ?? null) ? $saved['page'] : []
+    );
+
+    $rawBlocks = is_array($saved['blocks'] ?? null) ? $saved['blocks'] : $defaults['blocks'];
+
+    $blocks = [];
+    foreach ($rawBlocks as $block) {
+        if (!is_array($block)) {
+            continue;
+        }
+        $blocks[] = services_builder_normalize_block($block);
+    }
+
+    if (!$blocks) {
+        $blocks = $defaults['blocks'];
+    }
+
+    return [
+        'page'   => $page,
+        'blocks' => $blocks,
+    ];
+}
+
+function services_builder_sync_page(array $page): void
+{
+    $title = trim((string) ($page['title'] ?? 'Services'));
+    $excerpt = trim((string) ($page['subtitle'] ?? ''));
+    $metaTitle = trim((string) ($page['meta_title'] ?? ''));
+    $metaDescription = trim((string) ($page['meta_description'] ?? ''));
+
+    if ($title === '') {
+        $title = 'Services';
+    }
+
+    if ($metaTitle === '') {
+        $metaTitle = $title . ' | ' . company_name();
+    }
+
+    if ($metaDescription === '') {
+        $metaDescription = $excerpt;
+    }
+
+    $existing = db_fetch('SELECT id FROM pages WHERE slug = ? LIMIT 1', ['services']);
+
+    if ($existing) {
+        db_execute(
+            'UPDATE pages SET title = ?, excerpt = ?, meta_title = ?, meta_description = ?, content_html = ?, status = ? WHERE id = ?',
+            [
+                $title,
+                $excerpt,
+                $metaTitle,
+                $metaDescription,
+                '<p>Page pilotée depuis le builder Services.</p>',
+                'published',
+                (int) $existing['id'],
+            ]
+        );
+    } else {
+        db_execute(
+            'INSERT INTO pages (title, slug, page_type, excerpt, meta_title, meta_description, content_html, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [
+                $title,
+                'services',
+                'page',
+                $excerpt,
+                $metaTitle,
+                $metaDescription,
+                '<p>Page pilotée depuis le builder Services.</p>',
+                'published',
+            ]
+        );
+    }
+}
+
 function upload_image_field(string $field, string $dir = 'gallery'): ?string
 {
     if (empty($_FILES[$field]['name'])) return null;
@@ -246,14 +548,6 @@ function theme_css_variables(): string
         '--hero-eyebrow-color' => setting('home_eyebrow_color', '#7f94d6'),
         '--hero-title-color' => setting('home_title_color', '#ffffff'),
         '--hero-lead-color' => setting('home_lead_color', '#d9e2ff'),
-        '--hero-eyebrow-size' => setting('home_eyebrow_size', '0.95rem'),
-        '--hero-title-size' => setting('home_title_size', 'clamp(3.9rem, 7vw, 6.15rem)'),
-        '--hero-lead-size' => setting('home_lead_size', '1.18rem'),
-        '--hero-chip-size' => setting('home_chip_size', '1rem'),
-        '--hero-button-size' => setting('home_button_size', '1rem'),
-        '--hero-feature-size' => setting('home_feature_size', '0.98rem'),
-        '--hero-quote-title-size' => setting('home_quote_title_size', 'clamp(1.95rem, 3vw, 2.7rem)'),
-        '--hero-services-overlap' => setting('home_services_overlap', '5.6rem'),
     ];
     $css = ':root{';
     foreach ($vars as $k=>$v) $css .= $k . ':' . $v . ';';
@@ -279,28 +573,13 @@ function hero_settings(): array
         'feature_2_text' => setting('home_feature_2_text', 'Appel, devis, contact, espace client'),
         'feature_3_title' => setting('home_feature_3_title', 'Image premium'),
         'feature_3_text' => setting('home_feature_3_text', 'Corporate, claire et rassurante'),
-        'quote_eyebrow' => setting('home_quote_eyebrow', 'DEMANDE DE DEVIS GRATUITE'),
-        'quote_title' => setting('home_quote_title', 'Obtenir un rappel rapide'),
-        'quote_title_size' => setting('home_quote_title_size', 'clamp(1.95rem, 3vw, 2.7rem)'),
+        'quote_eyebrow' => setting('home_quote_eyebrow', 'Demande rapide'),
+        'quote_title' => setting('home_quote_title', 'Être rappelé'),
         'quote_service_label' => setting('home_quote_service_label', 'Service'),
         'quote_city_label' => setting('home_quote_city_label', 'Ville'),
         'quote_city_placeholder' => setting('home_quote_city_placeholder', 'Ex : Meaux, Paris, Toulouse'),
-        'quote_button_label' => setting('home_quote_button_label', 'Continuer'),
+        'quote_button_label' => setting('home_quote_button_label', 'Être rappelé'),
         'quote_meta' => setting('home_quote_meta', 'Artisans disponibles • devis gratuit • réponse rapide'),
-    ];
-}
-
-function hero_banner_settings(): array
-{
-    return [
-        'eyebrow' => setting('home_banner_eyebrow', 'Urgence technique'),
-        'title' => setting('home_banner_title', 'Astreinte visible, message clair, conversion immédiate'),
-        'lead' => setting('home_banner_lead', 'Le site met en avant votre numéro, le devis en ligne et des pages métier dédiées pour capter les demandes utiles dès l’arrivée sur la page d’accueil.'),
-        'button1_label' => setting('home_banner_button1_label', 'Appel urgent'),
-        'button1_url' => setting('home_banner_button1_url', company_phone_link()),
-        'button2_label' => setting('home_banner_button2_label', 'Envoyer un message'),
-        'button2_url' => setting('home_banner_button2_url', 'quote'),
-        'logo_path' => setting('home_banner_logo_path', ''),
     ];
 }
 
@@ -314,6 +593,18 @@ function hero_feature_cards(array $hero): array
     return array_values(array_filter($features, static fn(array $f): bool => $f['title'] !== '' || $f['text'] !== ''));
 }
 
+function public_asset_exists(string $path): bool
+{
+    $path = trim($path);
+    if ($path === '') {
+        return false;
+    }
+    if (preg_match('#^(https?:)?//#i', $path)) {
+        return true;
+    }
+    return is_file(__DIR__ . '/../' . ltrim($path, '/'));
+}
+
 function service_cards_settings(): array
 {
     $default = [
@@ -323,103 +614,25 @@ function service_cards_settings(): array
         ['title'=>'Maintenance & modernisation','image'=>'storage/uploads/services/service-maintenance.svg','link'=>'depannage-paris'],
     ];
     $cards = get_json_setting('home_service_cards', $default);
-    return $cards ?: $default;
-}
+    if (!$cards) {
+        return $default;
+    }
 
+    $normalized = [];
+    foreach ($default as $index => $fallback) {
+        $card = is_array($cards[$index] ?? null) ? $cards[$index] : [];
+        $image = trim((string) ($card['image'] ?? ''));
+        if ($image === '' || !public_asset_exists($image)) {
+            $image = $fallback['image'];
+        }
+        $normalized[] = [
+            'title' => trim((string) ($card['title'] ?? '')) !== '' ? trim((string) $card['title']) : $fallback['title'],
+            'image' => $image,
+            'link' => trim((string) ($card['link'] ?? '')) !== '' ? trim((string) $card['link']) : $fallback['link'],
+        ];
+    }
 
-function home_expertise_settings(): array
-{
-    $defaultCards = [
-        [
-            'icon' => '⚡',
-            'title' => 'Électricité',
-            'lead' => 'Mise en sécurité, dépannage, tableaux, rénovation et alimentation des équipements techniques.',
-            'item_1' => 'Recherche de panne et remise en service',
-            'item_2' => 'Mise en sécurité et remise en conformité',
-            'item_3' => 'Tableaux électriques, TGBT et protection',
-            'link' => 'electricien-meaux',
-        ],
-        [
-            'icon' => '🔧',
-            'title' => 'Plomberie',
-            'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
-            'item_1' => 'Recherche de fuite',
-            'item_2' => 'Réseaux sanitaires et robinetterie',
-            'item_3' => 'Maintenance des installations d’eau',
-            'link' => 'plombier-meaux',
-        ],
-        [
-            'icon' => '🔥',
-            'title' => 'Chauffage',
-            'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
-            'item_1' => 'Diagnostic de panne chauffage',
-            'item_2' => 'Remise en service et contrôle de fonctionnement',
-            'item_3' => 'Optimisation des réglages',
-            'link' => 'services',
-        ],
-        [
-            'icon' => '❄️',
-            'title' => 'Climatisation',
-            'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
-            'item_1' => 'Diagnostic de dysfonctionnement',
-            'item_2' => 'Entretien courant et nettoyage',
-            'item_3' => 'Contrôle des performances',
-            'link' => 'climatisation-meaux',
-        ],
-    ];
-
-    return [
-        'eyebrow' => setting('home_expertise_eyebrow', 'Expertise'),
-        'title' => setting('home_expertise_title', 'Notre expertise multitechnique'),
-        'lead' => setting('home_expertise_lead', 'Des blocs métier clairs pour présenter vos interventions principales et orienter rapidement le client vers le bon service.'),
-        'cards' => get_json_setting('home_expertise_cards', $defaultCards),
-    ];
-}
-
-function home_reviews_block_settings(): array
-{
-    return [
-        'eyebrow' => setting('home_reviews_eyebrow', 'Avis clients'),
-        'title' => setting('home_reviews_title', 'Des témoignages qui rassurent'),
-        'lead' => setting('home_reviews_lead', ''),
-    ];
-}
-
-function home_quote_panel_settings(): array
-{
-    return [
-        'eyebrow' => setting('home_quote_panel_eyebrow', 'Demande de devis'),
-        'title' => setting('home_quote_panel_title', 'Demande de devis'),
-        'lead' => setting('home_quote_panel_lead', 'Décrivez votre besoin en quelques lignes. EMAE vous recontacte rapidement avec un devis clair et adapté.'),
-        'service_label' => setting('home_quote_panel_service_label', 'Service'),
-        'service_placeholder' => setting('home_quote_panel_service_placeholder', 'Choisir'),
-        'message_label' => setting('home_quote_panel_message_label', 'Votre besoin'),
-        'urgency_label' => setting('home_quote_panel_urgency_label', 'Urgence'),
-        'button_label' => setting('home_quote_panel_button_label', quote_form_options()['submit_label']),
-    ];
-}
-
-function home_zone_settings(): array
-{
-    $defaultCards = [
-        ['title' => 'Île-de-France', 'text' => 'Interventions rapides sur Paris, Seine-et-Marne, Val-de-Marne et départements voisins selon vos demandes.'],
-        ['title' => 'Occitanie', 'text' => 'Déploiement des interventions, installations et opérations de maintenance sur les zones couvertes par EMAE.'],
-        ['title' => 'Sites multi-techniques', 'text' => 'Organisation des demandes urgentes, contrats de maintenance et interventions planifiées selon vos bâtiments.'],
-    ];
-
-    return [
-        'eyebrow' => setting('home_zone_eyebrow', 'Zone d’intervention'),
-        'title' => setting('home_zone_title', 'Une zone d’intervention claire et rassurante'),
-        'lead' => setting('home_zone_lead', 'Mets en avant vos zones principales et la logique de couverture pour rassurer dès la page d’accueil.'),
-        'badges' => array_values(array_filter([
-            setting('home_zone_badge_1', 'Île-de-France'),
-            setting('home_zone_badge_2', 'Occitanie'),
-            setting('home_zone_badge_3', 'Intervention planifiée & urgence'),
-        ], static fn($v): bool => trim((string) $v) !== '')),
-        'button_label' => setting('home_zone_button_label', 'Voir nos zones'),
-        'button_url' => setting('home_zone_button_url', 'contact'),
-        'cards' => get_json_setting('home_zone_cards', $defaultCards),
-    ];
+    return $normalized;
 }
 
 function seo_defaults(string $route = 'home', ?array $page = null): array

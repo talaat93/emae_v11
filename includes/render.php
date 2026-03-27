@@ -110,6 +110,235 @@ function render_header(string $active = ''): void
     }
 }
 
+
+function services_builder_resolve_url(string $url): string
+{
+    $url = trim($url);
+    if ($url === '') {
+        return '';
+    }
+
+    if (!preg_match('#^(https?:|mailto:|tel:|/)#i', $url)) {
+        $url = route_url($url);
+    }
+
+    return $url;
+}
+
+function services_builder_section_style(array $block): string
+{
+    $styles = [];
+
+    if (trim((string) ($block['background'] ?? '')) !== '') {
+        $styles[] = 'background:' . trim((string) $block['background']);
+    }
+
+    if (trim((string) ($block['text_color'] ?? '')) !== '') {
+        $styles[] = 'color:' . trim((string) $block['text_color']);
+    }
+
+    return implode(';', $styles);
+}
+
+function render_services_builder_page(array $config): void
+{
+    $page = $config['page'] ?? [];
+    $blocks = is_array($config['blocks'] ?? null) ? $config['blocks'] : [];
+
+    $eyebrow = trim((string) ($page['eyebrow'] ?? ''));
+    $title = trim((string) ($page['title'] ?? 'Services'));
+    $subtitle = trim((string) ($page['subtitle'] ?? ''));
+    $heroBackground = trim((string) ($page['hero_background'] ?? '#0b1641'));
+    $heroTextColor = trim((string) ($page['hero_text_color'] ?? '#ffffff'));
+    $heroImage = trim((string) ($page['hero_image'] ?? ''));
+    $primaryLabel = trim((string) ($page['primary_label'] ?? ''));
+    $primaryUrl = services_builder_resolve_url((string) ($page['primary_url'] ?? ''));
+    $secondaryLabel = trim((string) ($page['secondary_label'] ?? ''));
+    $secondaryUrl = services_builder_resolve_url((string) ($page['secondary_url'] ?? ''));
+
+    $heroStyles = [];
+    if ($heroBackground !== '') {
+        $heroStyles[] = 'background:' . $heroBackground;
+    }
+    if ($heroTextColor !== '') {
+        $heroStyles[] = 'color:' . $heroTextColor;
+    }
+    if ($heroImage !== '') {
+        $heroStyles[] = 'background-image:linear-gradient(135deg, rgba(11,22,65,.88), rgba(11,22,65,.68)), url("' . asset_url($heroImage) . '")';
+        $heroStyles[] = 'background-size:cover';
+        $heroStyles[] = 'background-position:center';
+    }
+
+    echo '<section class="page-hero services-hero" style="' . e(implode(';', $heroStyles)) . '">';
+    echo '<div class="container services-hero__inner">';
+    echo '<div class="services-hero__content">';
+
+    if ($eyebrow !== '') {
+        echo '<p class="eyebrow">' . e($eyebrow) . '</p>';
+    }
+
+    echo '<h1>' . e($title) . '</h1>';
+
+    if ($subtitle !== '') {
+        echo '<p class="services-hero__lead">' . e($subtitle) . '</p>';
+    }
+
+    if (($primaryLabel !== '' && $primaryUrl !== '') || ($secondaryLabel !== '' && $secondaryUrl !== '')) {
+        echo '<div class="services-hero__actions">';
+        if ($primaryLabel !== '' && $primaryUrl !== '') {
+            echo '<a class="btn btn--primary" href="' . e($primaryUrl) . '">' . e($primaryLabel) . '</a>';
+        }
+        if ($secondaryLabel !== '' && $secondaryUrl !== '') {
+            echo '<a class="btn btn--secondary" href="' . e($secondaryUrl) . '">' . e($secondaryLabel) . '</a>';
+        }
+        echo '</div>';
+    }
+
+    echo '</div>';
+    echo '</div>';
+    echo '</section>';
+
+    foreach ($blocks as $index => $block) {
+        render_services_builder_block($block, (int) $index);
+    }
+}
+
+function render_services_builder_block(array $block, int $index = 0): void
+{
+    $type = trim((string) ($block['type'] ?? 'text'));
+    $anchor = trim((string) ($block['anchor'] ?? ''));
+    $eyebrow = trim((string) ($block['eyebrow'] ?? ''));
+    $title = trim((string) ($block['title'] ?? ''));
+    $subtitle = trim((string) ($block['subtitle'] ?? ''));
+    $text = (string) ($block['text'] ?? '');
+    $html = (string) ($block['html'] ?? '');
+    $image = trim((string) ($block['image'] ?? ''));
+    $layout = trim((string) ($block['layout'] ?? 'image_right'));
+    $buttonLabel = trim((string) ($block['button_label'] ?? ''));
+    $buttonUrl = services_builder_resolve_url((string) ($block['button_url'] ?? ''));
+    $button2Label = trim((string) ($block['button2_label'] ?? ''));
+    $button2Url = services_builder_resolve_url((string) ($block['button2_url'] ?? ''));
+    $items = is_array($block['items'] ?? null) ? $block['items'] : [];
+
+    $style = services_builder_section_style($block);
+    $sectionId = $anchor !== '' ? ' id="' . e($anchor) . '"' : '';
+    $styleAttr = $style !== '' ? ' style="' . e($style) . '"' : '';
+
+    echo '<section class="section services-builder-section services-builder-section--' . e($type) . '"' . $sectionId . $styleAttr . '>';
+    echo '<div class="container">';
+
+    $renderHeader = !in_array($type, ['cta'], true);
+
+    if ($renderHeader && ($eyebrow !== '' || $title !== '' || $subtitle !== '')) {
+        echo '<div class="services-builder-section__head">';
+        if ($eyebrow !== '') {
+            echo '<p class="eyebrow">' . e($eyebrow) . '</p>';
+        }
+        if ($title !== '') {
+            echo '<h2>' . e($title) . '</h2>';
+        }
+        if ($subtitle !== '') {
+            echo '<p>' . e($subtitle) . '</p>';
+        }
+        echo '</div>';
+    }
+
+    if ($type === 'text' || $type === 'image_text') {
+        $hasImage = $image !== '';
+        if ($type === 'image_text' && $hasImage) {
+            echo '<div class="services-split ' . ($layout === 'image_left' ? 'services-split--image-left' : 'services-split--image-right') . '">';
+            echo '<div class="services-copy">';
+            if (trim(strip_tags($text)) !== '') {
+                echo '<div class="rich-content services-richtext">' . $text . '</div>';
+            }
+            if ($buttonLabel !== '' && $buttonUrl !== '') {
+                echo '<div class="services-block__actions"><a class="btn btn--primary" href="' . e($buttonUrl) . '">' . e($buttonLabel) . '</a></div>';
+            }
+            echo '</div>';
+            echo '<div class="services-media"><img src="' . e(asset_url($image)) . '" alt="' . e($title !== '' ? $title : 'Service') . '"></div>';
+            echo '</div>';
+        } else {
+            echo '<div class="services-copy services-copy--narrow">';
+            if (trim(strip_tags($text)) !== '') {
+                echo '<div class="rich-content services-richtext">' . $text . '</div>';
+            }
+            if ($buttonLabel !== '' && $buttonUrl !== '') {
+                echo '<div class="services-block__actions"><a class="btn btn--primary" href="' . e($buttonUrl) . '">' . e($buttonLabel) . '</a></div>';
+            }
+            echo '</div>';
+        }
+    } elseif ($type === 'cards') {
+        echo '<div class="services-cards">';
+        foreach ($items as $item) {
+            $itemTitle = trim((string) ($item['title'] ?? ''));
+            $itemText = trim((string) ($item['text'] ?? ''));
+            $itemImage = trim((string) ($item['image'] ?? ''));
+            $itemButtonLabel = trim((string) ($item['button_label'] ?? ''));
+            $itemButtonUrl = services_builder_resolve_url((string) ($item['button_url'] ?? ''));
+
+            echo '<article class="services-card">';
+            if ($itemImage !== '') {
+                echo '<img src="' . e(asset_url($itemImage)) . '" alt="' . e($itemTitle !== '' ? $itemTitle : 'Service') . '">';
+            }
+            if ($itemTitle !== '') {
+                echo '<h3>' . e($itemTitle) . '</h3>';
+            }
+            if ($itemText !== '') {
+                echo '<p>' . e($itemText) . '</p>';
+            }
+            if ($itemButtonLabel !== '' && $itemButtonUrl !== '') {
+                echo '<div class="services-card__actions"><a class="btn btn--secondary btn--small" href="' . e($itemButtonUrl) . '">' . e($itemButtonLabel) . '</a></div>';
+            }
+            echo '</article>';
+        }
+        echo '</div>';
+    } elseif ($type === 'faq') {
+        echo '<div class="services-faq">';
+        foreach ($items as $item) {
+            $question = trim((string) ($item['question'] ?? ''));
+            $answer = (string) ($item['answer'] ?? '');
+
+            echo '<details class="services-faq__item"' . ($index === 0 ? ' open' : '') . '>';
+            echo '<summary>' . e($question) . '</summary>';
+            echo '<div class="rich-content services-richtext">' . $answer . '</div>';
+            echo '</details>';
+        }
+        echo '</div>';
+    } elseif ($type === 'cta') {
+        echo '<div class="services-cta">';
+        echo '<div class="services-cta__content">';
+        if ($eyebrow !== '') {
+            echo '<p class="eyebrow">' . e($eyebrow) . '</p>';
+        }
+        if ($title !== '') {
+            echo '<h2>' . e($title) . '</h2>';
+        }
+        if (trim(strip_tags($text)) !== '') {
+            echo '<div class="services-richtext">' . $text . '</div>';
+        }
+        echo '</div>';
+
+        if (($buttonLabel !== '' && $buttonUrl !== '') || ($button2Label !== '' && $button2Url !== '')) {
+            echo '<div class="services-cta__actions">';
+            if ($buttonLabel !== '' && $buttonUrl !== '') {
+                echo '<a class="btn btn--primary" href="' . e($buttonUrl) . '">' . e($buttonLabel) . '</a>';
+            }
+            if ($button2Label !== '' && $button2Url !== '') {
+                echo '<a class="btn btn--secondary" href="' . e($button2Url) . '">' . e($button2Label) . '</a>';
+            }
+            echo '</div>';
+        }
+
+        echo '</div>';
+    } elseif ($type === 'html') {
+        echo $html;
+    }
+
+    echo '</div>';
+    echo '</section>';
+}
+
+
 function render_footer(): void
 {
     $footerCols = [
