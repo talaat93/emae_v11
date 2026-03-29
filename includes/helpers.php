@@ -193,6 +193,189 @@ function css_value(string $value, string $fallback = ''): string
 }
 
 
+function hero_banner_settings(): array
+{
+    $defaults = [
+        'eyebrow' => 'Urgence technique',
+        'title' => 'Astreinte visible, message clair, conversion immédiate',
+        'lead' => 'Le site met en avant votre numéro, le devis en ligne et des pages métier dédiées pour capter les demandes utiles dès l’arrivée sur la page d’accueil.',
+        'button1_label' => 'Appel urgent',
+        'button1_url' => company_phone_link(),
+        'button2_label' => 'Envoyer un message',
+        'button2_url' => 'contact',
+        'logo_path' => '',
+    ];
+
+    $saved = get_json_setting('home_urgency_banner', []);
+    $config = array_merge($defaults, is_array($saved) ? $saved : []);
+
+    foreach (['eyebrow', 'title', 'lead', 'button1_label', 'button1_url', 'button2_label', 'button2_url', 'logo_path'] as $key) {
+        $config[$key] = trim((string) ($config[$key] ?? ''));
+    }
+
+    if ($config['button1_url'] === '') {
+        $config['button1_url'] = company_phone_link();
+    }
+    if ($config['button2_url'] === '') {
+        $config['button2_url'] = 'contact';
+    }
+
+    return $config;
+}
+
+function home_expertise_settings(): array
+{
+    $defaults = [
+        'eyebrow' => 'Expertise',
+        'title' => 'Notre expertise multitechnique',
+        'lead' => 'Une présentation plus claire de nos pôles pour rassurer le client et l’orienter rapidement vers le bon service.',
+        'cards' => [
+            [
+                'icon' => '⚡',
+                'title' => 'Électricité',
+                'lead' => 'Mise en sécurité, dépannage, tableaux, rénovation et alimentation des équipements techniques.',
+                'item_1' => 'Recherche de panne et remise en service',
+                'item_2' => 'Mise en sécurité et remise en conformité',
+                'item_3' => 'Tableaux électriques, TGBT et protections',
+                'link' => 'electricien-meaux',
+            ],
+            [
+                'icon' => '🔧',
+                'title' => 'Plomberie',
+                'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
+                'item_1' => 'Recherche de fuite',
+                'item_2' => 'Réseaux sanitaires et robinetterie',
+                'item_3' => 'Maintenance des installations d’eau',
+                'link' => 'plombier-meaux',
+            ],
+            [
+                'icon' => '🔥',
+                'title' => 'Chauffage',
+                'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
+                'item_1' => 'Diagnostic de panne chauffage',
+                'item_2' => 'Remise en service et contrôle de fonctionnement',
+                'item_3' => 'Optimisation des réglages',
+                'link' => 'services',
+            ],
+            [
+                'icon' => '❄️',
+                'title' => 'Climatisation',
+                'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
+                'item_1' => 'Diagnostic de dysfonctionnement',
+                'item_2' => 'Entretien courant et nettoyage',
+                'item_3' => 'Contrôle des performances',
+                'link' => 'climatisation-meaux',
+            ],
+        ],
+    ];
+
+    $saved = get_json_setting('home_expertise_section', []);
+    $config = array_merge($defaults, is_array($saved) ? $saved : []);
+    $config['eyebrow'] = trim((string) ($config['eyebrow'] ?? $defaults['eyebrow']));
+    $config['title'] = trim((string) ($config['title'] ?? $defaults['title']));
+    $config['lead'] = trim((string) ($config['lead'] ?? $defaults['lead']));
+
+    $cards = is_array($config['cards'] ?? null) ? $config['cards'] : [];
+    $normalized = [];
+    foreach ($defaults['cards'] as $index => $fallback) {
+        $card = is_array($cards[$index] ?? null) ? $cards[$index] : [];
+        $normalized[] = [
+            'icon' => trim((string) ($card['icon'] ?? $fallback['icon'])) ?: $fallback['icon'],
+            'title' => trim((string) ($card['title'] ?? $fallback['title'])) ?: $fallback['title'],
+            'lead' => trim((string) ($card['lead'] ?? $fallback['lead'])) ?: $fallback['lead'],
+            'item_1' => trim((string) ($card['item_1'] ?? $fallback['item_1'])) ?: $fallback['item_1'],
+            'item_2' => trim((string) ($card['item_2'] ?? $fallback['item_2'])) ?: $fallback['item_2'],
+            'item_3' => trim((string) ($card['item_3'] ?? $fallback['item_3'])) ?: $fallback['item_3'],
+            'link' => trim((string) ($card['link'] ?? $fallback['link'])) ?: $fallback['link'],
+        ];
+    }
+    $config['cards'] = $normalized;
+
+    return $config;
+}
+
+function home_reviews_block_settings(): array
+{
+    $defaults = [
+        'eyebrow' => 'Avis clients',
+        'title' => 'Des témoignages qui rassurent',
+        'lead' => 'Quelques retours clients pour renforcer la confiance avant la prise de contact.',
+    ];
+
+    $saved = get_json_setting('home_reviews_block', []);
+    $config = array_merge($defaults, is_array($saved) ? $saved : []);
+    foreach (['eyebrow', 'title', 'lead'] as $key) {
+        $config[$key] = trim((string) ($config[$key] ?? $defaults[$key]));
+    }
+    return $config;
+}
+
+function home_quote_panel_settings(): array
+{
+    $defaults = [
+        'eyebrow' => 'Demande de devis',
+        'title' => 'Demande de devis',
+        'lead' => 'Décrivez votre besoin et obtenez une réponse rapide.',
+        'service_label' => 'Service',
+        'service_placeholder' => 'Choisir',
+        'message_label' => 'Votre besoin',
+        'urgency_label' => 'Urgence',
+        'button_label' => quote_form_options()['submit_label'],
+    ];
+
+    $saved = get_json_setting('home_quote_panel', []);
+    $config = array_merge($defaults, is_array($saved) ? $saved : []);
+    foreach (array_keys($defaults) as $key) {
+        $config[$key] = trim((string) ($config[$key] ?? $defaults[$key]));
+        if ($config[$key] === '') {
+            $config[$key] = (string) $defaults[$key];
+        }
+    }
+    return $config;
+}
+
+function home_zone_settings(): array
+{
+    $defaults = [
+        'eyebrow' => 'Zone d’intervention',
+        'title' => 'Une zone d’intervention claire et rassurante',
+        'lead' => 'Intervention sur un périmètre annoncé clairement, avec un délai de prise en charge rapide selon le secteur.',
+        'badges' => ['Île-de-France', 'Devis gratuit', 'Intervention rapide'],
+        'button_label' => 'Voir nos zones',
+        'button_url' => 'services',
+        'cards' => [
+            ['title' => 'Paris (75)', 'text' => 'Interventions rapides pour particuliers, commerces et petits sites tertiaires.'],
+            ['title' => 'Seine-et-Marne (77)', 'text' => 'Dépannage, entretien et modernisation sur un large secteur.'],
+            ['title' => 'Petite couronne', 'text' => 'Hauts-de-Seine, Seine-Saint-Denis et Val-de-Marne selon disponibilité.'],
+            ['title' => 'Sur étude', 'text' => 'Autres zones possibles selon nature de la mission et urgence demandée.'],
+        ],
+    ];
+
+    $saved = get_json_setting('home_zone_section', []);
+    $config = array_merge($defaults, is_array($saved) ? $saved : []);
+    $config['eyebrow'] = trim((string) ($config['eyebrow'] ?? $defaults['eyebrow']));
+    $config['title'] = trim((string) ($config['title'] ?? $defaults['title']));
+    $config['lead'] = trim((string) ($config['lead'] ?? $defaults['lead']));
+    $config['button_label'] = trim((string) ($config['button_label'] ?? $defaults['button_label']));
+    $config['button_url'] = trim((string) ($config['button_url'] ?? $defaults['button_url']));
+    $config['badges'] = array_values(array_filter(array_map(static fn($badge): string => trim((string) $badge), is_array($config['badges'] ?? null) ? $config['badges'] : $defaults['badges']), static fn(string $badge): bool => $badge !== ''));
+
+    $cards = is_array($config['cards'] ?? null) ? $config['cards'] : [];
+    $normalized = [];
+    foreach ($defaults['cards'] as $index => $fallback) {
+        $card = is_array($cards[$index] ?? null) ? $cards[$index] : [];
+        $normalized[] = [
+            'title' => trim((string) ($card['title'] ?? $fallback['title'])) ?: $fallback['title'],
+            'text' => trim((string) ($card['text'] ?? $fallback['text'])) ?: $fallback['text'],
+        ];
+    }
+    $config['cards'] = $normalized;
+
+    return $config;
+}
+
+
+
 function services_builder_type_labels(): array
 {
     return [
@@ -670,110 +853,4 @@ function nav_items(): array
 function quote_form_options(): array
 {
     return ['success_message'=>setting('form_success_message','Votre demande a bien été envoyée.'), 'submit_label'=>setting('form_submit_label','Envoyer ma demande'), 'mail_to'=>setting('form_email_to', company_email())];
-}
-
-
-if (!function_exists('hero_banner_settings')) {
-    function hero_banner_settings(): array
-    {
-        $defaults = [
-            'eyebrow' => '',
-            'title' => 'Astreinte visible, message clair, conversion immédiate',
-            'lead' => "Le site met en avant votre numéro, le devis en ligne et des pages métier dédiées pour capter les demandes utiles dès l’arrivée sur la page d’accueil.",
-            'button1_label' => 'Appeler maintenant',
-            'button1_url' => company_phone_link(),
-            'button2_label' => 'Envoyer un message',
-            'button2_url' => 'contact',
-            'logo_path' => '',
-        ];
-
-        return array_merge($defaults, get_json_setting('home_urgency_banner', []));
-    }
-}
-
-if (!function_exists('home_expertise_settings')) {
-    function home_expertise_settings(): array
-    {
-        $defaults = [
-            'eyebrow' => 'Expertise',
-            'title' => 'Notre expertise multitechnique',
-            'lead' => 'La version 2 du site ajoute plus de contenu métier, une vraie page zones d’intervention, des documents PDF et une structure plus crédible pour un site B2C premium.',
-            'cards' => [
-                [
-                    'icon' => '⚡',
-                    'title' => 'Électricité',
-                    'lead' => 'Mise en sécurité, dépannage, tableaux, rénovation et alimentation des équipements techniques.',
-                    'item_1' => 'Recherche de panne et remise en service',
-                    'item_2' => 'Mise en sécurité et remise en conformité',
-                    'item_3' => 'Tableaux électriques, TGBT et protections',
-                    'link' => '',
-                ],
-                [
-                    'icon' => '🔧',
-                    'title' => 'Plomberie',
-                    'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
-                    'item_1' => 'Recherche de fuite',
-                    'item_2' => 'Réseaux sanitaires et robinetterie',
-                    'item_3' => 'Maintenance des installations d’eau',
-                    'link' => '',
-                ],
-                [
-                    'icon' => '🔥',
-                    'title' => 'Chauffage',
-                    'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
-                    'item_1' => 'Diagnostic de panne chauffage',
-                    'item_2' => 'Remise en service et contrôle de fonctionnement',
-                    'item_3' => 'Optimisation des réglages',
-                    'link' => '',
-                ],
-                [
-                    'icon' => '❄️',
-                    'title' => 'Climatisation',
-                    'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
-                    'item_1' => 'Diagnostic de dysfonctionnement',
-                    'item_2' => 'Entretien courant et nettoyage',
-                    'item_3' => 'Contrôle des performances',
-                    'link' => '',
-                ],
-            ],
-        ];
-
-        $saved = get_json_setting('home_expertise_section', []);
-        $cards = is_array($saved['cards'] ?? null) ? $saved['cards'] : $defaults['cards'];
-        $config = array_merge($defaults, $saved);
-        $config['cards'] = $cards;
-        return $config;
-    }
-}
-
-if (!function_exists('home_zone_settings')) {
-    function home_zone_settings(): array
-    {
-        $defaults = [
-            'eyebrow' => 'Zone d’intervention',
-            'title' => 'Une zone d’intervention claire et rassurante',
-            'lead' => 'Intervention rapide en Île-de-France selon disponibilité, avec zones clairement identifiées pour rassurer le client.',
-            'badges' => ['Île-de-France', 'Urgence 24/7', 'Délais annoncés clairement'],
-            'button_label' => 'Nous contacter',
-            'button_url' => 'contact',
-            'cards' => [
-                ['title' => 'Paris (75)', 'text' => 'Interventions rapides dans Paris et petite couronne selon disponibilité.'],
-                ['title' => 'Seine-et-Marne (77)', 'text' => 'Dépannage, diagnostic et interventions planifiées en Seine-et-Marne.'],
-                ['title' => 'Yvelines (78)', 'text' => 'Prise en charge selon type de demande et urgence constatée.'],
-                ['title' => 'Essonne (91)', 'text' => 'Interventions multitechniques pour habitat, commerce et petit tertiaire.'],
-                ['title' => 'Hauts-de-Seine (92)', 'text' => 'Zone couverte selon disponibilité des techniciens et créneaux.'],
-                ['title' => 'Seine-Saint-Denis (93)', 'text' => 'Dépannage, sécurisation et remises en service 24h/24 selon secteur.'],
-                ['title' => 'Val-de-Marne (94)', 'text' => 'Interventions ciblées avec communication claire avant déplacement.'],
-                ['title' => 'Val-d’Oise (95)', 'text' => 'Couverture de demandes urgentes et sur rendez-vous.'],
-            ],
-        ];
-
-        $saved = get_json_setting('home_zone_section', []);
-        $cards = is_array($saved['cards'] ?? null) ? $saved['cards'] : $defaults['cards'];
-        $badges = is_array($saved['badges'] ?? null) ? $saved['badges'] : $defaults['badges'];
-        $config = array_merge($defaults, $saved);
-        $config['cards'] = $cards;
-        $config['badges'] = $badges;
-        return $config;
-    }
 }
