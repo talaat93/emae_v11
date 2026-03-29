@@ -494,6 +494,261 @@ function services_builder_sync_page(array $page): void
     }
 }
 
+
+
+function service_electric_page_default_config(?array $page = null): array
+{
+    $pageTitle = trim((string) ($page['title'] ?? 'Électricien urgence')) ?: 'Électricien urgence';
+
+    return [
+        'meta' => [
+            'page_title' => $pageTitle,
+            'excerpt' => 'Électricien de proximité pour dépannage, mise en sécurité, rénovation et intervention rapide.',
+            'meta_title' => $pageTitle . ' | ' . company_name(),
+            'meta_description' => 'Électricien EMAE : dépannage rapide, mise en sécurité, tableau électrique, rénovation et urgence 24h/24.',
+        ],
+        'hero' => [
+            'eyebrow' => 'Électricien urgence',
+            'title' => 'Nos interventions en électricité',
+            'lead' => 'Voici les situations dans lesquelles nous pouvons vous aider immédiatement.',
+            'primary_label' => 'Appel gratuit',
+            'primary_url' => company_phone_link(),
+            'secondary_label' => company_phone(),
+            'secondary_url' => company_phone_link(),
+        ],
+        'interventions' => [
+            'title' => 'Nos interventions en électricité',
+            'lead' => 'Voici les situations dans lesquelles on peut vous aider immédiatement.',
+            'items' => [
+                ['icon' => '⏻', 'title' => 'Panne électrique', 'text' => 'Intervention rapide pour rétablir l’électricité.'],
+                ['icon' => '▣', 'title' => 'Tableau électrique', 'text' => 'Réparation ou remplacement de tableau électrique.'],
+                ['icon' => '⌁', 'title' => 'Dépannage prise', 'text' => 'Réparation ou remplacement de prises électriques.'],
+                ['icon' => '◉', 'title' => 'Éclairage', 'text' => 'Installation et dépannage d’éclairage intérieur et extérieur.'],
+                ['icon' => '⌂', 'title' => 'Installation électrique', 'text' => 'Installation complète ou partielle d’électricité.'],
+                ['icon' => '✓', 'title' => 'Mise aux normes', 'text' => 'Mise en conformité de votre installation électrique.'],
+                ['icon' => '▤', 'title' => 'Rénovation électrique', 'text' => 'Rénovation complète de votre installation électrique.'],
+                ['icon' => '◎', 'title' => 'Urgence électricité', 'text' => 'Intervention d’urgence 24/7 pour tous problèmes électriques.'],
+            ],
+        ],
+        'trust' => [
+            'title' => 'Besoin d’un électricien ?',
+            'lead' => 'Intervention rapide en Île-de-France. Service d’électricité professionnel 24h/24.',
+            'benefits' => [
+                ['title' => 'Techniciens certifiés & intervention sécurisée', 'text' => 'Intervention rapide et sécurisée, conformité aux normes électriques.'],
+                ['title' => 'Prix annoncés avant intervention', 'text' => 'Devis clair au téléphone, sans frais cachés.'],
+                ['title' => 'Arrivée en 30 minutes à Paris et en Île-de-France', 'text' => 'Technicien local envoyé immédiatement.'],
+                ['title' => 'Paiement sécurisé & facture', 'text' => 'CB, espèces. Facture utilisable pour demande de remboursement.'],
+            ],
+            'price_label' => 'Panne électrique simple',
+            'price_value' => 'À partir de 39€',
+            'price_note' => 'Déplacement et devis annoncés avant intervention',
+            'footer_text' => 'Intervention sécurisée garantie',
+            'button_label' => 'Nous appeler maintenant',
+            'button_url' => company_phone_link(),
+        ],
+        'steps' => [
+            'title' => 'Process en 3 étapes',
+            'lead' => 'Intervention rapide, communication transparente, résultat garanti.',
+            'items' => [
+                ['number' => '1', 'title' => 'Prise de contact', 'text' => 'Appelez-nous ou remplissez le formulaire.'],
+                ['number' => '2', 'title' => 'Déplacement rapide', 'text' => 'Technicien local envoyé en 30–60 minutes.'],
+                ['number' => '3', 'title' => 'Intervention + facture détaillée', 'text' => 'Travail effectué et facture transparente.'],
+            ],
+        ],
+        'zones' => [
+            'title' => 'Nos zones d’intervention 24h/24',
+            'lead' => 'Intervention en Île-de-France — 30 min en moyenne',
+            'map_image' => '',
+            'items' => [
+                ['label' => 'Paris (75)'],
+                ['label' => 'Seine-et-Marne (77)'],
+                ['label' => 'Yvelines (78)'],
+                ['label' => 'Essonne (91)'],
+                ['label' => 'Hauts-de-Seine (92)'],
+                ['label' => 'Seine-Saint-Denis (93)'],
+                ['label' => 'Val-de-Marne (94)'],
+                ['label' => 'Val-d’Oise (95)'],
+            ],
+        ],
+        'faq' => [
+            'title' => 'Questions fréquentes',
+            'items' => [
+                ['question' => 'Quel est le prix d’une intervention ?', 'answer' => 'Le prix dépend de la panne, de l’accès et du matériel nécessaire. Un devis clair est annoncé avant intervention complémentaire.'],
+                ['question' => 'Quel est le délai d’intervention ?', 'answer' => 'Selon la zone et l’heure, un technicien peut être envoyé rapidement pour les urgences.'],
+                ['question' => 'Intervenez-vous pour les pannes électriques urgentes ?', 'answer' => 'Oui, nous prenons en charge les demandes urgentes pour sécuriser l’installation et rechercher la panne.'],
+                ['question' => 'Que faire en cas de panne électrique totale ?', 'answer' => 'Coupez si nécessaire les équipements sensibles, vérifiez le disjoncteur principal et contactez-nous pour un diagnostic rapide.'],
+                ['question' => 'Acceptez-vous les paiements par carte bancaire ?', 'answer' => 'Oui, selon le technicien et l’intervention, plusieurs moyens de paiement sont possibles avec facture.'],
+                ['question' => 'Intervenez-vous pour la mise aux normes électriques ?', 'answer' => 'Oui, nous pouvons sécuriser l’existant et proposer les travaux nécessaires à une installation plus fiable.'],
+            ],
+        ],
+        'contact' => [
+            'title' => 'Contactez votre électricien',
+            'lead' => 'Besoin d’un électricien ? Contactez-nous pour un devis gratuit ou une intervention d’urgence. Réponse rapide garantie.',
+            'form_title' => 'Un technicien vous contacte dès réception.',
+            'info_title' => 'Informations de contact',
+            'reasons_title' => 'Pourquoi nous contacter ?',
+            'reasons' => [
+                ['text' => 'Devis gratuit et sans engagement'],
+                ['text' => 'Intervention rapide selon votre zone'],
+                ['text' => 'Technicien certifié & intervention sécurisée'],
+                ['text' => 'Facture conforme pour assurance habitation'],
+            ],
+        ],
+    ];
+}
+
+function service_electric_page_settings(?array $page = null): array
+{
+    $defaults = service_electric_page_default_config($page);
+    $saved = get_json_setting('service_electric_page', []);
+
+    $config = [
+        'meta' => array_merge($defaults['meta'], is_array($saved['meta'] ?? null) ? $saved['meta'] : []),
+        'hero' => array_merge($defaults['hero'], is_array($saved['hero'] ?? null) ? $saved['hero'] : []),
+        'interventions' => array_merge($defaults['interventions'], is_array($saved['interventions'] ?? null) ? $saved['interventions'] : []),
+        'trust' => array_merge($defaults['trust'], is_array($saved['trust'] ?? null) ? $saved['trust'] : []),
+        'steps' => array_merge($defaults['steps'], is_array($saved['steps'] ?? null) ? $saved['steps'] : []),
+        'zones' => array_merge($defaults['zones'], is_array($saved['zones'] ?? null) ? $saved['zones'] : []),
+        'faq' => array_merge($defaults['faq'], is_array($saved['faq'] ?? null) ? $saved['faq'] : []),
+        'contact' => array_merge($defaults['contact'], is_array($saved['contact'] ?? null) ? $saved['contact'] : []),
+    ];
+
+    $config['interventions']['items'] = [];
+    foreach ((array) ($saved['interventions']['items'] ?? $defaults['interventions']['items']) as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $row = [
+            'icon' => trim((string) ($item['icon'] ?? '')),
+            'title' => trim((string) ($item['title'] ?? '')),
+            'text' => trim((string) ($item['text'] ?? '')),
+        ];
+        if ($row['icon'] === '' && $row['title'] === '' && $row['text'] === '') {
+            continue;
+        }
+        if ($row['icon'] === '') {
+            $row['icon'] = '•';
+        }
+        $config['interventions']['items'][] = $row;
+    }
+    if (!$config['interventions']['items']) {
+        $config['interventions']['items'] = $defaults['interventions']['items'];
+    }
+
+    $config['trust']['benefits'] = [];
+    foreach ((array) ($saved['trust']['benefits'] ?? $defaults['trust']['benefits']) as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $row = [
+            'title' => trim((string) ($item['title'] ?? '')),
+            'text' => trim((string) ($item['text'] ?? '')),
+        ];
+        if ($row['title'] === '' && $row['text'] === '') {
+            continue;
+        }
+        $config['trust']['benefits'][] = $row;
+    }
+    if (!$config['trust']['benefits']) {
+        $config['trust']['benefits'] = $defaults['trust']['benefits'];
+    }
+
+    $config['steps']['items'] = [];
+    foreach ((array) ($saved['steps']['items'] ?? $defaults['steps']['items']) as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $row = [
+            'number' => trim((string) ($item['number'] ?? '')),
+            'title' => trim((string) ($item['title'] ?? '')),
+            'text' => trim((string) ($item['text'] ?? '')),
+        ];
+        if ($row['number'] === '' && $row['title'] === '' && $row['text'] === '') {
+            continue;
+        }
+        $config['steps']['items'][] = $row;
+    }
+    if (!$config['steps']['items']) {
+        $config['steps']['items'] = $defaults['steps']['items'];
+    }
+
+    $config['zones']['items'] = [];
+    foreach ((array) ($saved['zones']['items'] ?? $defaults['zones']['items']) as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $label = trim((string) ($item['label'] ?? ''));
+        if ($label === '') {
+            continue;
+        }
+        $config['zones']['items'][] = ['label' => $label];
+    }
+    if (!$config['zones']['items']) {
+        $config['zones']['items'] = $defaults['zones']['items'];
+    }
+
+    $config['faq']['items'] = [];
+    foreach ((array) ($saved['faq']['items'] ?? $defaults['faq']['items']) as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $row = [
+            'question' => trim((string) ($item['question'] ?? '')),
+            'answer' => trim((string) ($item['answer'] ?? '')),
+        ];
+        if ($row['question'] === '' && $row['answer'] === '') {
+            continue;
+        }
+        $config['faq']['items'][] = $row;
+    }
+    if (!$config['faq']['items']) {
+        $config['faq']['items'] = $defaults['faq']['items'];
+    }
+
+    $config['contact']['reasons'] = [];
+    foreach ((array) ($saved['contact']['reasons'] ?? $defaults['contact']['reasons']) as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $text = trim((string) ($item['text'] ?? ''));
+        if ($text === '') {
+            continue;
+        }
+        $config['contact']['reasons'][] = ['text' => $text];
+    }
+    if (!$config['contact']['reasons']) {
+        $config['contact']['reasons'] = $defaults['contact']['reasons'];
+    }
+
+    return $config;
+}
+
+function service_electric_page_sync_page(array $config): void
+{
+    $meta = is_array($config['meta'] ?? null) ? $config['meta'] : [];
+
+    $title = trim((string) ($meta['page_title'] ?? 'Électricien urgence')) ?: 'Électricien urgence';
+    $excerpt = trim((string) ($meta['excerpt'] ?? ''));
+    $metaTitle = trim((string) ($meta['meta_title'] ?? '')) ?: ($title . ' | ' . company_name());
+    $metaDescription = trim((string) ($meta['meta_description'] ?? '')) ?: $excerpt;
+
+    $existing = db_fetch('SELECT id, content_html, page_type, status FROM pages WHERE slug = ? LIMIT 1', ['electricien-meaux']);
+    if ($existing) {
+        db_execute(
+            'UPDATE pages SET title = ?, excerpt = ?, meta_title = ?, meta_description = ?, page_type = ?, status = ? WHERE id = ?',
+            [
+                $title,
+                $excerpt,
+                $metaTitle,
+                $metaDescription,
+                (string) ($existing['page_type'] ?? 'landing'),
+                (string) ($existing['status'] ?? 'published') ?: 'published',
+                (int) $existing['id'],
+            ]
+        );
+    }
+}
+
 function upload_image_field(string $field, string $dir = 'gallery'): ?string
 {
     if (empty($_FILES[$field]['name'])) return null;
@@ -670,110 +925,4 @@ function nav_items(): array
 function quote_form_options(): array
 {
     return ['success_message'=>setting('form_success_message','Votre demande a bien été envoyée.'), 'submit_label'=>setting('form_submit_label','Envoyer ma demande'), 'mail_to'=>setting('form_email_to', company_email())];
-}
-
-
-if (!function_exists('hero_banner_settings')) {
-    function hero_banner_settings(): array
-    {
-        $defaults = [
-            'eyebrow' => '',
-            'title' => 'Astreinte visible, message clair, conversion immédiate',
-            'lead' => "Le site met en avant votre numéro, le devis en ligne et des pages métier dédiées pour capter les demandes utiles dès l’arrivée sur la page d’accueil.",
-            'button1_label' => 'Appeler maintenant',
-            'button1_url' => company_phone_link(),
-            'button2_label' => 'Envoyer un message',
-            'button2_url' => 'contact',
-            'logo_path' => '',
-        ];
-
-        return array_merge($defaults, get_json_setting('home_urgency_banner', []));
-    }
-}
-
-if (!function_exists('home_expertise_settings')) {
-    function home_expertise_settings(): array
-    {
-        $defaults = [
-            'eyebrow' => 'Expertise',
-            'title' => 'Notre expertise multitechnique',
-            'lead' => 'La version 2 du site ajoute plus de contenu métier, une vraie page zones d’intervention, des documents PDF et une structure plus crédible pour un site B2C premium.',
-            'cards' => [
-                [
-                    'icon' => '⚡',
-                    'title' => 'Électricité',
-                    'lead' => 'Mise en sécurité, dépannage, tableaux, rénovation et alimentation des équipements techniques.',
-                    'item_1' => 'Recherche de panne et remise en service',
-                    'item_2' => 'Mise en sécurité et remise en conformité',
-                    'item_3' => 'Tableaux électriques, TGBT et protections',
-                    'link' => '',
-                ],
-                [
-                    'icon' => '🔧',
-                    'title' => 'Plomberie',
-                    'lead' => 'Recherche de fuite, réparation sanitaire, remplacement d’équipements et maintenance courante.',
-                    'item_1' => 'Recherche de fuite',
-                    'item_2' => 'Réseaux sanitaires et robinetterie',
-                    'item_3' => 'Maintenance des installations d’eau',
-                    'link' => '',
-                ],
-                [
-                    'icon' => '🔥',
-                    'title' => 'Chauffage',
-                    'lead' => 'Diagnostic, dépannage et optimisation des équipements de chauffage pour confort et continuité de service.',
-                    'item_1' => 'Diagnostic de panne chauffage',
-                    'item_2' => 'Remise en service et contrôle de fonctionnement',
-                    'item_3' => 'Optimisation des réglages',
-                    'link' => '',
-                ],
-                [
-                    'icon' => '❄️',
-                    'title' => 'Climatisation',
-                    'lead' => 'Dépannage, entretien et remise en service des installations de climatisation et rafraîchissement.',
-                    'item_1' => 'Diagnostic de dysfonctionnement',
-                    'item_2' => 'Entretien courant et nettoyage',
-                    'item_3' => 'Contrôle des performances',
-                    'link' => '',
-                ],
-            ],
-        ];
-
-        $saved = get_json_setting('home_expertise_section', []);
-        $cards = is_array($saved['cards'] ?? null) ? $saved['cards'] : $defaults['cards'];
-        $config = array_merge($defaults, $saved);
-        $config['cards'] = $cards;
-        return $config;
-    }
-}
-
-if (!function_exists('home_zone_settings')) {
-    function home_zone_settings(): array
-    {
-        $defaults = [
-            'eyebrow' => 'Zone d’intervention',
-            'title' => 'Une zone d’intervention claire et rassurante',
-            'lead' => 'Intervention rapide en Île-de-France selon disponibilité, avec zones clairement identifiées pour rassurer le client.',
-            'badges' => ['Île-de-France', 'Urgence 24/7', 'Délais annoncés clairement'],
-            'button_label' => 'Nous contacter',
-            'button_url' => 'contact',
-            'cards' => [
-                ['title' => 'Paris (75)', 'text' => 'Interventions rapides dans Paris et petite couronne selon disponibilité.'],
-                ['title' => 'Seine-et-Marne (77)', 'text' => 'Dépannage, diagnostic et interventions planifiées en Seine-et-Marne.'],
-                ['title' => 'Yvelines (78)', 'text' => 'Prise en charge selon type de demande et urgence constatée.'],
-                ['title' => 'Essonne (91)', 'text' => 'Interventions multitechniques pour habitat, commerce et petit tertiaire.'],
-                ['title' => 'Hauts-de-Seine (92)', 'text' => 'Zone couverte selon disponibilité des techniciens et créneaux.'],
-                ['title' => 'Seine-Saint-Denis (93)', 'text' => 'Dépannage, sécurisation et remises en service 24h/24 selon secteur.'],
-                ['title' => 'Val-de-Marne (94)', 'text' => 'Interventions ciblées avec communication claire avant déplacement.'],
-                ['title' => 'Val-d’Oise (95)', 'text' => 'Couverture de demandes urgentes et sur rendez-vous.'],
-            ],
-        ];
-
-        $saved = get_json_setting('home_zone_section', []);
-        $cards = is_array($saved['cards'] ?? null) ? $saved['cards'] : $defaults['cards'];
-        $badges = is_array($saved['badges'] ?? null) ? $saved['badges'] : $defaults['badges'];
-        $config = array_merge($defaults, $saved);
-        $config['cards'] = $cards;
-        $config['badges'] = $badges;
-        return $config;
-    }
 }
